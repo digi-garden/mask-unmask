@@ -1,10 +1,18 @@
 # Mask & Unmask
 
+<p align="center">
+  <a href="https://digi-garden.com/">
+    <img src="public/digi-garden-logo.svg" alt="digi-garden" width="280">
+  </a>
+</p>
+
 ChatGPTやClaudeなどの生成AIへ文章・ログを渡す前に、機密情報をブラウザ内で仮名化し、AIの回答をあとから元の内容へ復元するWebツールです。
 
 入力テキストや置換マップをサーバーへ送信せず、変換処理はブラウザ内で完結します。
 
 > 公開URL：準備中
+
+開発・提供：[digi-garden（デジガーデン）](https://digi-garden.com/)
 
 ## 主な機能
 

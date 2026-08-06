@@ -283,15 +283,20 @@ export default function App() {
       <footer className="border-t border-brand-border/20 py-4 text-center text-slate-500 text-xs">
         <p>&copy; 2026 digi-garden</p>
         <p className="mt-1.5 flex justify-center items-center gap-3">
-          <span>
-            提供：
+          <span className="flex items-center gap-2">
+            <span>提供：</span>
             <a
               href="https://digi-garden.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-400 underline decoration-slate-600 underline-offset-2 transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
+              aria-label="digi-garden（デジガーデン）のWebサイトを開く"
+              className="inline-flex rounded transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
             >
-              デジガーデン
+              <img
+                src="/digi-garden-logo.svg"
+                alt="digi-garden（デジガーデン）"
+                className="h-5 w-auto"
+              />
             </a>
           </span>
           <span className="text-slate-700">|</span>
