@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useTransition } from 'react';
 import { MappingItem, unmaskText } from '../utils/maskEngine';
+import { PRIVACY_PATH } from '../paths';
 
 interface UnmaskTabProps {
   value: string;
@@ -99,10 +100,10 @@ export function UnmaskTab({
       <div className="text-sm text-slate-400 bg-brand-surface/20 border border-brand-border/20 px-4 py-3 rounded-lg flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
         <span>仮名化・復元処理はブラウザ内で行われ、入力内容を外部へ送信するアプリケーション処理はありません。</span>
         <a
-          href="/safety-and-privacy"
+          href={PRIVACY_PATH}
           onClick={(e) => {
             e.preventDefault();
-            onNavigate('/safety-and-privacy');
+            onNavigate(PRIVACY_PATH);
           }}
           className="text-brand-primary underline hover:text-brand-primaryHover focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary rounded px-1 shrink-0 text-xs font-semibold"
         >

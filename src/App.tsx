@@ -6,23 +6,24 @@ import { UnmaskTab } from './components/UnmaskTab';
 import { CommonActions } from './components/CommonActions';
 import { MappingItem, syncMappings } from './utils/maskEngine';
 import { SafetyPrivacy } from './components/SafetyPrivacy';
-
-// パスの正規化ヘルパー (末尾スラッシュの除去)
-const getCleanPath = (path: string): string => {
-  const cleaned = path.trim().replace(/\/+$/, '');
-  return cleaned === '' ? '/' : cleaned;
-};
+import {
+  APP_BASE_PATH,
+  APP_HOME_PATH,
+  APP_PUBLIC_ASSET_BASE,
+  PRIVACY_PATH,
+  normalizeAppPath,
+} from './paths';
 
 export default function App() {
   // 原子的セッション永続化フックのバインド
   const [state, setState, clearState] = usePersistedState();
 
   // 簡易ルーティング管理
-  const [currentPath, setCurrentPath] = useState(() => getCleanPath(window.location.pathname));
+  const [currentPath, setCurrentPath] = useState(() => normalizeAppPath(window.location.pathname));
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(getCleanPath(window.location.pathname));
+      setCurrentPath(normalizeAppPath(window.location.pathname));
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -30,23 +31,25 @@ export default function App() {
 
   // パスの正規化リダイレクト / 不明なパスに対するトップフォールバック
   useEffect(() => {
-    const allowedPaths = ['/', '/safety-and-privacy'];
+    const allowedPaths = [APP_BASE_PATH, PRIVACY_PATH];
     if (!allowedPaths.includes(currentPath)) {
-      window.history.replaceState(null, '', '/');
-      setCurrentPath('/');
+      window.history.replaceState(null, '', APP_HOME_PATH);
+      setCurrentPath(APP_BASE_PATH);
     } else {
       // 許可されたパスであっても、実際のブラウザURL（pathname）が正規化されていない場合は同期
       const currentUrlPath = window.location.pathname;
-      if (getCleanPath(currentUrlPath) !== currentUrlPath) {
-        window.history.replaceState(null, '', currentPath);
+      const canonicalPath = currentPath === APP_BASE_PATH ? APP_HOME_PATH : currentPath;
+      if (currentUrlPath !== canonicalPath) {
+        window.history.replaceState(null, '', canonicalPath);
       }
     }
   }, [currentPath]);
 
   const navigateTo = (path: string) => {
-    const cleaned = getCleanPath(path);
-    window.history.pushState(null, '', cleaned);
-    setCurrentPath(cleaned);
+    const normalized = normalizeAppPath(path);
+    const targetPath = normalized === APP_BASE_PATH ? APP_HOME_PATH : normalized;
+    window.history.pushState(null, '', targetPath);
+    setCurrentPath(normalized);
   };
 
   // キー入力時のバースト防止用の即時入力テキストステート (指摘3)
@@ -185,10 +188,10 @@ export default function App() {
       {/* ヘッダー領域 */}
       <header className="border-b border-brand-border/30 bg-brand-surface/60 backdrop-blur-md sticky top-0 z-10 px-4 py-4 md:px-8 flex justify-between items-center shadow-lg">
         <a
-          href="/"
+          href={APP_HOME_PATH}
           onClick={(e) => {
             e.preventDefault();
-            navigateTo('/');
+            navigateTo(APP_HOME_PATH);
           }}
           className="flex items-center gap-3 hover:opacity-80 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-lg p-0.5"
         >
@@ -210,7 +213,7 @@ export default function App() {
 
       {/* メインコンテンツ */}
       <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col gap-6">
-        {currentPath === '/safety-and-privacy' ? (
+        {currentPath === PRIVACY_PATH ? (
           <SafetyPrivacy onNavigate={navigateTo} />
         ) : (
           <>
@@ -293,7 +296,7 @@ export default function App() {
               className="inline-flex rounded transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
             >
               <img
-                src="/digi-garden-logo.svg"
+                src={`${APP_PUBLIC_ASSET_BASE}digi-garden-logo.svg`}
                 alt="digi-garden（デジガーデン）"
                 className="h-5 w-auto"
               />
@@ -301,10 +304,10 @@ export default function App() {
           </span>
           <span className="text-slate-700">|</span>
           <a
-            href="/safety-and-privacy"
+            href={PRIVACY_PATH}
             onClick={(e) => {
               e.preventDefault();
-              navigateTo('/safety-and-privacy');
+              navigateTo(PRIVACY_PATH);
             }}
             className="text-slate-400 underline decoration-slate-600 underline-offset-2 transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
           >

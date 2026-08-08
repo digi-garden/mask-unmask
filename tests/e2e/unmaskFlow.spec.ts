@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Mask & Unmask E2E Flow', () => {
 
   test('Mask ➔ Unmask 全体フローが正常に機能し、正しく仮名化および復元が行われること (指摘26-1)', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/mask-unmask/');
     await expect(page).toHaveTitle('Mask & Unmask | digi-garden');
 
     // 画面UI表示項目の検証
@@ -57,7 +57,7 @@ test.describe('Mask & Unmask E2E Flow', () => {
   });
 
   test('画面幅縮小時に、モバイル専用レスポンシブデザインへ切り替わること (指摘26-2 & 指摘3)', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/mask-unmask/');
 
     // モバイルのビューポート (375x667) に設定
     await page.setViewportSize({ width: 375, height: 667 });
@@ -104,7 +104,7 @@ test.describe('Mask & Unmask E2E Flow', () => {
       });
     });
 
-    await page.goto('/');
+    await page.goto('/mask-unmask/');
 
     // 2. 外部への fetch 実行 (CSPにより遮断される)
     await page.evaluate(async () => {
@@ -127,13 +127,13 @@ test.describe('Mask & Unmask E2E Flow', () => {
 
   test('「安全性とプライバシー」ページへのSPA遷移、アプリへの復帰、および直接アクセスが動作すること', async ({ page }) => {
     // 1. トップページから遷移
-    await page.goto('/');
+    await page.goto('/mask-unmask/');
     const privacyLink = page.locator('footer >> text=安全性とプライバシー');
     await expect(privacyLink).toBeVisible();
     await privacyLink.click();
 
     // 2. 安全性とプライバシーページの表示確認
-    await expect(page).toHaveURL(/\/safety-and-privacy/);
+    await expect(page).toHaveURL(/\/mask-unmask\/safety-and-privacy$/);
     const heading = page.locator('text=安全性とプライバシーについて');
     await expect(heading).toBeVisible();
 
@@ -141,23 +141,23 @@ test.describe('Mask & Unmask E2E Flow', () => {
     const backBtn = page.locator('button:has-text("ツールに戻る")');
     await expect(backBtn).toBeVisible();
     await backBtn.click();
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/mask-unmask\/$/);
     await expect(page.locator('#tab-mask')).toBeVisible();
 
     // 4. アプリから案内リンクでの遷移
     const labelNoticeLink = page.locator('#panel-mask a:has-text("安全性とプライバシーについて詳しく見る")');
     await expect(labelNoticeLink).toBeVisible();
     await labelNoticeLink.click();
-    await expect(page).toHaveURL(/\/safety-and-privacy/);
+    await expect(page).toHaveURL(/\/mask-unmask\/safety-and-privacy$/);
 
     // 5. ヘッダーロゴをクリックしてアプリに戻る
     const headerLogo = page.locator('header a >> text=Mask & Unmask');
     await expect(headerLogo).toBeVisible();
     await headerLogo.click();
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/mask-unmask\/$/);
 
     // 6. 直接アクセスの確認
-    await page.goto('/safety-and-privacy');
+    await page.goto('/mask-unmask/safety-and-privacy');
     await expect(page.locator('text=安全性とプライバシーについて')).toBeVisible();
 
     // 7. 直接アクセス時の再読み込みの確認
@@ -165,28 +165,50 @@ test.describe('Mask & Unmask E2E Flow', () => {
     await expect(page.locator('text=安全性とプライバシーについて')).toBeVisible();
 
     // 8. 末尾スラッシュ付きURLでのアクセス確認 (正規化され、安全性ページが表示されること)
-    await page.goto('/safety-and-privacy/');
-    await expect(page).toHaveURL(/\/safety-and-privacy$/);
+    await page.goto('/mask-unmask/safety-and-privacy/');
+    await expect(page).toHaveURL(/\/mask-unmask\/safety-and-privacy$/);
     await expect(page.locator('text=安全性とプライバシーについて')).toBeVisible();
 
     // 9. 不明なパスへの直接アクセス時の自動トップ画面フォールバック確認
-    await page.goto('/unknown-random-path');
-    await expect(page).toHaveURL(/\/$/);
+    await page.goto('/mask-unmask/unknown-random-path');
+    await expect(page).toHaveURL(/\/mask-unmask\/$/);
     await expect(page.locator('#tab-mask')).toBeVisible();
 
     // 10. ブラウザの戻る・進む動作の確認
-    await page.goto('/');
+    await page.goto('/mask-unmask/');
     const footerLink = page.locator('footer >> text=安全性とプライバシー');
     await footerLink.click();
-    await expect(page).toHaveURL(/\/safety-and-privacy$/);
+    await expect(page).toHaveURL(/\/mask-unmask\/safety-and-privacy$/);
 
     await page.goBack();
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/mask-unmask\/$/);
     await expect(page.locator('#tab-mask')).toBeVisible();
 
     await page.goForward();
-    await expect(page).toHaveURL(/\/safety-and-privacy$/);
+    await expect(page).toHaveURL(/\/mask-unmask\/safety-and-privacy$/);
     await expect(page.locator('text=安全性とプライバシーについて')).toBeVisible();
+  });
+
+  test('CircleNoteトップからアプリへ移動できること', async ({ page }) => {
+    await page.goto('/');
+    await expect(page).toHaveTitle('CircleNote');
+    await expect(page.getByRole('heading', { name: 'CircleNote', exact: true })).toBeVisible();
+
+    const appLink = page.getByRole('link', { name: /Mask & Unmaskを開く/ });
+    await expect(appLink).toHaveAttribute('href', '/mask-unmask/');
+    await appLink.click();
+    await expect(page).toHaveURL(/\/mask-unmask\/$/);
+    await expect(page.locator('header h1')).toHaveText('Mask & Unmask');
+  });
+
+  test('/mask-unmask を末尾スラッシュ付き正式URLへ301リダイレクトすること', async ({ request, page }) => {
+    const response = await request.get('/mask-unmask', { maxRedirects: 0 });
+    expect(response.status()).toBe(301);
+    expect(response.headers().location).toBe('/mask-unmask/');
+
+    await page.goto('/mask-unmask');
+    await expect(page).toHaveURL(/\/mask-unmask\/$/);
+    await expect(page.locator('#tab-mask')).toBeVisible();
   });
 
 });

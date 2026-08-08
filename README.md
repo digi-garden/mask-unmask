@@ -10,7 +10,7 @@ ChatGPTやClaudeなどの生成AIへ文章・ログを渡す前に、機密情�
 
 入力テキストや置換マップをサーバーへ送信せず、変換処理はブラウザ内で完結します。
 
-> 公開URL：準備中
+> 公開URL：https://circle-note.com/mask-unmask/
 
 開発・提供：[digi-garden（デジガーデン）](https://digi-garden.com/)
 
