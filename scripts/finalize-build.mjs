@@ -15,15 +15,6 @@ await rename(resolve(appOutput, '_headers'), resolve(outputRoot, '_headers'));
 
 await writeFile(
   resolve(outputRoot, '_redirects'),
-  [
-    '/mask-unmask /mask-unmask/ 301',
-    '/mask-unmask/assets/* /mask-unmask/assets/:splat 200',
-    '/mask-unmask/favicon.svg /mask-unmask/favicon.svg 200',
-    '/mask-unmask/favicon-32.png /mask-unmask/favicon-32.png 200',
-    '/mask-unmask/apple-touch-icon.png /mask-unmask/apple-touch-icon.png 200',
-    '/mask-unmask/digi-garden-logo.svg /mask-unmask/digi-garden-logo.svg 200',
-    '/mask-unmask/* /mask-unmask/index.html 200',
-    '',
-  ].join('\n'),
+  '/mask-unmask /mask-unmask/ 301\n',
   'utf8',
 );
