@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/prepare-build.mjs && vite build && node scripts/finalize-build.mjs",
+    "build": "node scripts/prepare-build.mjs && vite build && node scripts/finalize-build.mjs && node scripts/verify-build-headers.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
