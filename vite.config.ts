@@ -2,7 +2,6 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import type { Plugin } from 'vite';
-// @ts-expect-error The project intentionally does not install the full Node type package.
 import { readFile } from 'node:fs/promises';
 
 const APP_BASE_PATH = '/mask-unmask';

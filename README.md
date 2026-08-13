@@ -146,6 +146,14 @@ npx playwright install
 CI=true npm run test:e2e
 ```
 
+X告知用デモ動画の生成：
+
+```bash
+npm run demo:video
+```
+
+`artifacts/mask-unmask-x-demo.mp4`へ出力されます。詳細は[デモ動画生成手順](docs/demo-video.md)を参照してください。
+
 依存パッケージの監査：
 
 ```bash
