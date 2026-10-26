@@ -169,4 +169,19 @@ describe('App Integration', () => {
     const maskInput = screen.getByLabelText('仮名化元の入力テキスト') as HTMLTextAreaElement;
     expect(maskInput.value).toBe('john@example.com');
   });
+
+  it('フッターに「安全性とプライバシー」および外部「プライバシーポリシー」リンクが表示され、未承認の利用規約リンクが含まれないこと', () => {
+    render(<App />);
+
+    const safetyLink = screen.getByRole('link', { name: '安全性とプライバシー' });
+    expect(safetyLink.getAttribute('href')).toBe('/mask-unmask/safety-and-privacy');
+
+    const privacyPolicyLink = screen.getByRole('link', { name: 'プライバシーポリシー' });
+    expect(privacyPolicyLink.getAttribute('href')).toBe('https://digi-garden.com/privacy/');
+    expect(privacyPolicyLink.getAttribute('target')).toBe('_blank');
+    expect(privacyPolicyLink.getAttribute('rel')).toBe('noopener noreferrer');
+
+    // DG-02未承認のため利用規約リンクは存在しないこと
+    expect(screen.queryByRole('link', { name: /利用規約/ })).toBeNull();
+  });
 });

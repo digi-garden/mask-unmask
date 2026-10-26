@@ -140,9 +140,20 @@ export function SafetyPrivacy({ onNavigate }: SafetyPrivacyProps) {
           </h3>
           <div className="text-sm text-slate-300 space-y-2 leading-relaxed pl-7">
             <p>
-              本ツールは「デジガーデン」によって開発・提供されています。デジガーデン全体の個人情報保護方針につきましては、以下のリンクよりプライバシーポリシーをご確認ください。
+              本ツールは「デジガーデン」によって開発・提供されています。提供元のWebサイトおよび個人情報保護方針につきましては、以下のリンクよりご確認ください。
             </p>
-            <p className="mt-2">
+            <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2">
+              <a
+                href="https://digi-garden.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-brand-primary underline hover:text-brand-primaryHover transition"
+              >
+                <span>デジガーデン 公式サイト</span>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
               <a
                 href="https://digi-garden.com/privacy/"
                 target="_blank"
@@ -154,7 +165,7 @@ export function SafetyPrivacy({ onNavigate }: SafetyPrivacyProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </a>
-            </p>
+            </div>
           </div>
         </section>
 

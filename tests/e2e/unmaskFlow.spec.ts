@@ -137,6 +137,22 @@ test.describe('Mask & Unmask E2E Flow', () => {
     const heading = page.locator('text=安全性とプライバシーについて');
     await expect(heading).toBeVisible();
 
+    // 2-1. 法務導線（公式サイト・プライバシーポリシーリンク）の確認
+    const officialSiteLink = page.getByRole('link', { name: 'デジガーデン 公式サイト' });
+    await expect(officialSiteLink).toHaveAttribute('href', 'https://digi-garden.com/');
+    await expect(officialSiteLink).toHaveAttribute('target', '_blank');
+    await expect(officialSiteLink).toHaveAttribute('rel', 'noopener noreferrer');
+
+    const pagePrivacyLink = page.getByRole('link', { name: 'デジガーデン プライバシーポリシー' });
+    await expect(pagePrivacyLink).toHaveAttribute('href', 'https://digi-garden.com/privacy/');
+    await expect(pagePrivacyLink).toHaveAttribute('target', '_blank');
+    await expect(pagePrivacyLink).toHaveAttribute('rel', 'noopener noreferrer');
+
+    const footerPrivacyLink = page.locator('footer').getByRole('link', { name: 'プライバシーポリシー' });
+    await expect(footerPrivacyLink).toHaveAttribute('href', 'https://digi-garden.com/privacy/');
+    await expect(footerPrivacyLink).toHaveAttribute('target', '_blank');
+    await expect(footerPrivacyLink).toHaveAttribute('rel', 'noopener noreferrer');
+
     // 3. アプリへの復帰確認 (ツールに戻るボタン)
     const backBtn = page.locator('button:has-text("ツールに戻る")');
     await expect(backBtn).toBeVisible();

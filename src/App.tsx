@@ -313,6 +313,15 @@ export default function App() {
           >
             安全性とプライバシー
           </a>
+          <span className="text-slate-700">|</span>
+          <a
+            href="https://digi-garden.com/privacy/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-400 underline decoration-slate-600 underline-offset-2 transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
+          >
+            プライバシーポリシー
+          </a>
         </p>
       </footer>
 
