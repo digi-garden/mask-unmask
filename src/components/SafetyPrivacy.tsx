@@ -125,22 +125,22 @@ export function SafetyPrivacy({ onNavigate }: SafetyPrivacyProps) {
               <li>自動検出機能は特定のパターン（正規表現等）にマッチする情報を機械的に検出するものであり、すべての機密情報を完全に検出できるとは限りません。</li>
               <li>変換結果に機密情報が残っていないか、最終的には必ず利用者自身で目視確認してください。</li>
               <li>所属する企業・団体のセキュリティ規程、および適用される個人情報保護法等の関連法令に従ってご利用ください。</li>
-              <li>本ページは本ツールの技術的な処理とデータの扱いを説明するものであり、正式な免責事項（利用規約や免責規定等）は別途整備予定です。</li>
+              <li>本ページは本ツールの技術的な処理とデータの扱いを説明するものです。本ツールの利用条件および免責事項等については、デジガーデン共通の「利用規約」が適用されます。</li>
             </ul>
           </div>
         </section>
 
-        {/* 6. 提供元情報とプライバシーポリシー */}
+        {/* 6. 提供元情報・利用規約・プライバシーポリシー */}
         <section className="space-y-3">
           <h3 className="text-lg font-bold text-brand-primary flex items-center gap-2">
             <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            6. 提供元情報とプライバシーポリシー
+            6. 提供元情報・利用規約・プライバシーポリシー
           </h3>
           <div className="text-sm text-slate-300 space-y-2 leading-relaxed pl-7">
             <p>
-              本ツールは「デジガーデン」によって開発・提供されています。提供元のWebサイトおよび個人情報保護方針につきましては、以下のリンクよりご確認ください。
+              本ツールは「デジガーデン」によって開発・提供されています。本ツールの利用条件（利用規約）および個人情報保護方針（プライバシーポリシー）につきましては、以下のリンクよりご確認ください。
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2">
               <a
@@ -150,6 +150,17 @@ export function SafetyPrivacy({ onNavigate }: SafetyPrivacyProps) {
                 className="inline-flex items-center gap-1.5 text-brand-primary underline hover:text-brand-primaryHover transition"
               >
                 <span>デジガーデン 公式サイト</span>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+              <a
+                href="https://digi-garden.com/terms/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-brand-primary underline hover:text-brand-primaryHover transition"
+              >
+                <span>デジガーデン 利用規約</span>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>

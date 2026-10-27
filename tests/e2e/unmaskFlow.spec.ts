@@ -137,16 +137,26 @@ test.describe('Mask & Unmask E2E Flow', () => {
     const heading = page.locator('text=安全性とプライバシーについて');
     await expect(heading).toBeVisible();
 
-    // 2-1. 法務導線（公式サイト・プライバシーポリシーリンク）の確認
+    // 2-1. 法務導線（公式サイト・利用規約・プライバシーポリシーリンク）の確認
     const officialSiteLink = page.getByRole('link', { name: 'デジガーデン 公式サイト' });
     await expect(officialSiteLink).toHaveAttribute('href', 'https://digi-garden.com/');
     await expect(officialSiteLink).toHaveAttribute('target', '_blank');
     await expect(officialSiteLink).toHaveAttribute('rel', 'noopener noreferrer');
 
+    const pageTermsLink = page.getByRole('link', { name: 'デジガーデン 利用規約' });
+    await expect(pageTermsLink).toHaveAttribute('href', 'https://digi-garden.com/terms/');
+    await expect(pageTermsLink).toHaveAttribute('target', '_blank');
+    await expect(pageTermsLink).toHaveAttribute('rel', 'noopener noreferrer');
+
     const pagePrivacyLink = page.getByRole('link', { name: 'デジガーデン プライバシーポリシー' });
     await expect(pagePrivacyLink).toHaveAttribute('href', 'https://digi-garden.com/privacy/');
     await expect(pagePrivacyLink).toHaveAttribute('target', '_blank');
     await expect(pagePrivacyLink).toHaveAttribute('rel', 'noopener noreferrer');
+
+    const footerTermsLink = page.locator('footer').getByRole('link', { name: '利用規約' });
+    await expect(footerTermsLink).toHaveAttribute('href', 'https://digi-garden.com/terms/');
+    await expect(footerTermsLink).toHaveAttribute('target', '_blank');
+    await expect(footerTermsLink).toHaveAttribute('rel', 'noopener noreferrer');
 
     const footerPrivacyLink = page.locator('footer').getByRole('link', { name: 'プライバシーポリシー' });
     await expect(footerPrivacyLink).toHaveAttribute('href', 'https://digi-garden.com/privacy/');

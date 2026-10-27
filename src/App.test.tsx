@@ -170,18 +170,20 @@ describe('App Integration', () => {
     expect(maskInput.value).toBe('john@example.com');
   });
 
-  it('フッターに「安全性とプライバシー」および外部「プライバシーポリシー」リンクが表示され、未承認の利用規約リンクが含まれないこと', () => {
+  it('フッターに「安全性とプライバシー」および外部「利用規約」「プライバシーポリシー」リンクが安全属性付きで表示されること', () => {
     render(<App />);
 
     const safetyLink = screen.getByRole('link', { name: '安全性とプライバシー' });
     expect(safetyLink.getAttribute('href')).toBe('/mask-unmask/safety-and-privacy');
 
+    const termsLink = screen.getByRole('link', { name: '利用規約' });
+    expect(termsLink.getAttribute('href')).toBe('https://digi-garden.com/terms/');
+    expect(termsLink.getAttribute('target')).toBe('_blank');
+    expect(termsLink.getAttribute('rel')).toBe('noopener noreferrer');
+
     const privacyPolicyLink = screen.getByRole('link', { name: 'プライバシーポリシー' });
     expect(privacyPolicyLink.getAttribute('href')).toBe('https://digi-garden.com/privacy/');
     expect(privacyPolicyLink.getAttribute('target')).toBe('_blank');
     expect(privacyPolicyLink.getAttribute('rel')).toBe('noopener noreferrer');
-
-    // DG-02未承認のため利用規約リンクは存在しないこと
-    expect(screen.queryByRole('link', { name: /利用規約/ })).toBeNull();
   });
 });

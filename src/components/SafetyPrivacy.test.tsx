@@ -10,7 +10,7 @@ describe('SafetyPrivacy Component', () => {
     vi.restoreAllMocks();
   });
 
-  it('「安全性とプライバシーについて」の主要セクションと現行の免責事項説明が表示されること', () => {
+  it('「安全性とプライバシーについて」の主要セクションと共通利用規約の適用説明が表示されること', () => {
     render(<SafetyPrivacy onNavigate={mockOnNavigate} />);
 
     expect(screen.getByRole('heading', { name: '安全性とプライバシーについて' })).toBeDefined();
@@ -19,15 +19,20 @@ describe('SafetyPrivacy Component', () => {
     expect(screen.getByRole('heading', { name: /3\. 通信と外部サービス/ })).toBeDefined();
     expect(screen.getByRole('heading', { name: /4\. エクスポートデータの注意/ })).toBeDefined();
     expect(screen.getByRole('heading', { name: /5\. 利用上の注意/ })).toBeDefined();
-    expect(screen.getByRole('heading', { name: /6\. 提供元情報とプライバシーポリシー/ })).toBeDefined();
+    expect(screen.getByRole('heading', { name: /6\. 提供元情報・利用規約・プライバシーポリシー/ })).toBeDefined();
 
-    // DG-02未承認のため、利用規約適用文言ではなく現行の整備予定文言が維持されていること
+    // デジガーデン共通の「利用規約」が適用される旨が明記されていること
     expect(
-      screen.getByText(/正式な免責事項（利用規約や免責規定等）は別途整備予定です。/)
+      screen.getByText(/本ツールの利用条件および免責事項等については、デジガーデン共通の「利用規約」が適用されます。/)
     ).toBeDefined();
+
+    // 旧暫定文言（別途整備予定）が残っていないこと
+    expect(
+      screen.queryByText(/正式な免責事項（利用規約や免責規定等）は別途整備予定です。/)
+    ).toBeNull();
   });
 
-  it('提供元公式サイトおよびプライバシーポリシーへの外部リンクが安全属性付きで表示され、未承認の利用規約リンクが含まれないこと', () => {
+  it('提供元公式サイト・利用規約・プライバシーポリシーへの外部リンクが安全属性付きで表示されること', () => {
     render(<SafetyPrivacy onNavigate={mockOnNavigate} />);
 
     const siteLink = screen.getByRole('link', { name: /デジガーデン 公式サイト/ });
@@ -35,16 +40,15 @@ describe('SafetyPrivacy Component', () => {
     expect(siteLink.getAttribute('target')).toBe('_blank');
     expect(siteLink.getAttribute('rel')).toBe('noopener noreferrer');
 
+    const termsLink = screen.getByRole('link', { name: /デジガーデン 利用規約/ });
+    expect(termsLink.getAttribute('href')).toBe('https://digi-garden.com/terms/');
+    expect(termsLink.getAttribute('target')).toBe('_blank');
+    expect(termsLink.getAttribute('rel')).toBe('noopener noreferrer');
+
     const privacyLink = screen.getByRole('link', { name: /デジガーデン プライバシーポリシー/ });
     expect(privacyLink.getAttribute('href')).toBe('https://digi-garden.com/privacy/');
     expect(privacyLink.getAttribute('target')).toBe('_blank');
     expect(privacyLink.getAttribute('rel')).toBe('noopener noreferrer');
-
-    // DG-02未承認のため https://digi-garden.com/terms/ へのリンクは存在しないこと
-    const allLinks = screen.getAllByRole('link');
-    for (const link of allLinks) {
-      expect(link.getAttribute('href')).not.toBe('https://digi-garden.com/terms/');
-    }
   });
 
   it('パンくずの「ホーム」および下部の「ツールに戻る」ボタンでホームパスへ遷移できること', () => {
