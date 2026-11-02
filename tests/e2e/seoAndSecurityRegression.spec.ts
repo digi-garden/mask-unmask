@@ -341,7 +341,9 @@ test.describe('Phase 1 SEO & Security Regression Suite (SEO-01〜05 / SEC-SEO-01
     await page
       .locator('#unmask-input')
       .fill(`${secretUnmaskNote}: [CN_EMAIL_0001] / [CN_CUSTOM_0001] / [CN_EMAIL_0002]`);
-    await expect(page.locator('#unmask-output')).toContainText(secretEmail);
+    await expect(page.locator('#unmask-output')).toHaveValue(
+      `${secretUnmaskNote}: ${secretEmail} / ${secretCustom} / ${secretImported}`
+    );
 
     const inspectHeadAndUrl = async () => {
       return page.evaluate(() => {
