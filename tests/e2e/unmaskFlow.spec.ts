@@ -4,7 +4,7 @@ test.describe('Mask & Unmask E2E Flow', () => {
 
   test('Mask ➔ Unmask 全体フローが正常に機能し、正しく仮名化および復元が行われること (指摘26-1)', async ({ page }) => {
     await page.goto('/mask-unmask/');
-    await expect(page).toHaveTitle('Mask & Unmask | digi-garden');
+    await expect(page).toHaveTitle('Mask & Unmask | ブラウザでテキストを仮名化・復元');
 
     // 画面UI表示項目の検証
     const headerTitle = page.locator('header h1');
@@ -217,7 +217,7 @@ test.describe('Mask & Unmask E2E Flow', () => {
 
   test('CircleNoteトップからアプリへ移動できること', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle('CircleNote');
+    await expect(page).toHaveTitle('CircleNote | ブラウザで使えるテキスト仮名化ツール');
     await expect(page.getByRole('heading', { name: 'CircleNote', exact: true })).toBeVisible();
 
     const appLink = page.getByRole('link', { name: /Mask & Unmaskを開く/ });

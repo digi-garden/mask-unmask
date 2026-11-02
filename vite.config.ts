@@ -27,6 +27,20 @@ function previewAppRoutes(): Plugin {
           return;
         }
 
+        if (pathname === '/robots.txt') {
+          response.statusCode = 200;
+          response.setHeader('Content-Type', 'text/plain; charset=utf-8');
+          response.end(await readFile(new URL('./dist/robots.txt', import.meta.url)));
+          return;
+        }
+
+        if (pathname === '/sitemap.xml') {
+          response.statusCode = 200;
+          response.setHeader('Content-Type', 'application/xml; charset=utf-8');
+          response.end(await readFile(new URL('./dist/sitemap.xml', import.meta.url)));
+          return;
+        }
+
         if (pathname === APP_BASE_PATH) {
           response.statusCode = 301;
           response.setHeader('Location', `${APP_BASE_PATH}/`);

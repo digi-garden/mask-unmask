@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://circle-note.com/sitemap.xml

@@ -9,6 +9,8 @@ const appOutput = resolve(outputRoot, 'mask-unmask');
 await mkdir(outputRoot, { recursive: true });
 await copyFile(resolve(repositoryRoot, 'circle-note/index.html'), resolve(outputRoot, 'index.html'));
 await copyFile(resolve(repositoryRoot, 'circle-note/circle-note.css'), resolve(outputRoot, 'circle-note.css'));
+await copyFile(resolve(repositoryRoot, 'circle-note/robots.txt'), resolve(outputRoot, 'robots.txt'));
+await copyFile(resolve(repositoryRoot, 'circle-note/sitemap.xml'), resolve(outputRoot, 'sitemap.xml'));
 
 await rm(resolve(outputRoot, '_headers'), { force: true });
 await rename(resolve(appOutput, '_headers'), resolve(outputRoot, '_headers'));

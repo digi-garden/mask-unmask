@@ -186,4 +186,21 @@ describe('App Integration', () => {
     expect(privacyPolicyLink.getAttribute('target')).toBe('_blank');
     expect(privacyPolicyLink.getAttribute('rel')).toBe('noopener noreferrer');
   });
+
+  it('ホーム画面に用途説明・最短手順・注意事項・FAQが表示され、過剰な保証表現を含まないこと (SEO-05)', () => {
+    render(<App />);
+
+    expect(
+      screen.getByRole('heading', { name: 'Mask & Unmask の用途・使い方・よくある質問' })
+    ).toBeDefined();
+    expect(screen.getByRole('heading', { name: '主な用途・使用例' })).toBeDefined();
+    expect(screen.getByRole('heading', { name: '最短の利用手順' })).toBeDefined();
+    expect(screen.getByRole('heading', { name: '利用上の注意点' })).toBeDefined();
+    expect(screen.getByRole('heading', { name: 'よくある質問（FAQ）' })).toBeDefined();
+
+    const bodyText = document.body.textContent ?? '';
+    expect(bodyText).not.toContain('完全匿名化');
+    expect(bodyText).not.toContain('全種類の個人情報を自動検出');
+    expect(bodyText).not.toContain('絶対に安全');
+  });
 });

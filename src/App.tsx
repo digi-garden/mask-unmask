@@ -278,6 +278,67 @@ export default function App() {
                 showToast={showToast}
               />
             </div>
+
+            {/* 用途説明・最短手順・注意事項・FAQ (SEO-05) */}
+            <section
+              aria-labelledby="usage-guide-heading"
+              className="mt-4 bg-brand-surface/15 border border-brand-border/20 rounded-2xl p-5 md:p-6 text-slate-300 space-y-5"
+            >
+              <h2 id="usage-guide-heading" className="text-base font-bold text-white tracking-tight">
+                Mask &amp; Unmask の用途・使い方・よくある質問
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
+                <div className="bg-brand-surface/30 border border-brand-border/20 rounded-xl p-4 space-y-2">
+                  <h3 className="text-sm font-bold text-brand-primary">主な用途・使用例</h3>
+                  <p>
+                    生成AIへのプロンプト入力や障害ログ・問い合わせ文の共有前に、文章内のメールアドレス（EMAIL）・電話番号（PHONE）・IPアドレス（IPV4/IPV6）・認証トークン（APIKEY）や任意の固有名詞（CUSTOM）を一意の仮名化タグ（例: [CN_EMAIL_xxxx] 形式）へ置換し、AIの回答などを元の文字列へ復元できます。
+                  </p>
+                </div>
+
+                <div className="bg-brand-surface/30 border border-brand-border/20 rounded-xl p-4 space-y-2">
+                  <h3 className="text-sm font-bold text-brand-primary">最短の利用手順</h3>
+                  <ol className="list-decimal list-inside space-y-1">
+                    <li>「仮名化 (Mask)」に文章を入力し、自動検出または手動追加（PC画面のドラッグ選択・直接入力）で置換内容と出力を確認してコピーします。</li>
+                    <li>同じタブ内では「元データ復元 (Unmask)」にタグ付き文章を貼り付けるだけで元の文字列へ復元できます。</li>
+                    <li>別タブや後日復元する場合は、事前にJSONとしてエクスポートし、復元時にインポートして利用します。</li>
+                  </ol>
+                </div>
+
+                <div className="bg-brand-surface/30 border border-brand-border/20 rounded-xl p-4 space-y-2">
+                  <h3 className="text-sm font-bold text-brand-primary">利用上の注意点</h3>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>本ツールは置換マップで復元可能な「仮名化」を行うものであり、完全な匿名化ではありません。</li>
+                    <li>自動検出は正規表現パターンに基づくため、すべての機密情報の検出を保証しません。共有前に必ず出力結果を目視確認してください。</li>
+                    <li>エクスポートしたJSONファイルには元の文字列が平文で含まれるため、保管・共有の取り扱いにご注意ください。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="border-t border-brand-border/20 pt-4 space-y-3">
+                <h3 className="text-sm font-bold text-slate-200">よくある質問（FAQ）</h3>
+                <dl className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
+                  <div className="space-y-1">
+                    <dt className="font-semibold text-slate-100">Q. 入力したテキストや置換マップはサーバーへ送信されますか？</dt>
+                    <dd className="text-slate-400">
+                      いいえ。仮名化・復元の処理はすべてご利用のブラウザ内で実行され、外部サーバーへ送信されません。作業状態は同一タブ内の <code className="font-mono text-slate-300">sessionStorage</code> にのみ一時保存されます。
+                    </dd>
+                  </div>
+                  <div className="space-y-1">
+                    <dt className="font-semibold text-slate-100">Q. 氏名や社名など自動検出されない語句も仮名化できますか？</dt>
+                    <dd className="text-slate-400">
+                      はい。PC表示では入力テキストをドラッグ選択するか直接入力して追加登録することで、任意の文字列を仮名化タグ（[CN_CUSTOM_xxxx] 形式など）に置換できます。
+                    </dd>
+                  </div>
+                  <div className="space-y-1">
+                    <dt className="font-semibold text-slate-100">Q. タブを閉じたあとに元のテキストへ復元するにはどうすればよいですか？</dt>
+                    <dd className="text-slate-400">
+                      タブを閉じると一時保存データは消去されるため、事前に置換マップをJSONファイルとしてエクスポートして安全に保管してください。復元時にインポートすると元の文字列へ復元できます。
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </section>
           </>
         )}
       </main>
