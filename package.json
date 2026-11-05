@@ -12,7 +12,8 @@
     "test:perf": "vitest run src/utils/maskEngine.perf.test.ts",
     "test:e2e": "npm run build && playwright test",
     "type-check": "tsc --noEmit",
-    "demo:video": "node scripts/generate-demo-video.mjs"
+    "demo:video": "node scripts/generate-demo-video.mjs",
+    "verify:production": "node scripts/verify-production.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
