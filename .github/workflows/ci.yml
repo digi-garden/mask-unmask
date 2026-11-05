@@ -43,6 +43,9 @@ jobs:
       - name: Run performance test
         run: npm run test:perf
 
+      - name: Audit OSS lockfile metadata
+        run: npm run audit:oss
+
       - name: Build
         run: npm run build
 
