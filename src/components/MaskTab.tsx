@@ -302,9 +302,9 @@ export function MaskTab({
 
       {/* 自動検出トグルパネル - 2カラムの直下に配置し、横幅いっぱいを活用 */}
       <div className="bg-brand-surface/40 p-4 rounded-xl border border-brand-border/30 flex flex-col md:flex-row md:items-center gap-4">
-        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">
+        <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">
           自動検出カテゴリー
-        </h3>
+        </h2>
         <div className="flex flex-wrap gap-2.5">
           {(Object.keys(toggles) as Array<keyof typeof toggles>).map(key => (
             <label
@@ -342,7 +342,7 @@ export function MaskTab({
 
         {/* 左側: カスタム登録フォーム (PC専用 - hidden md:flex) */}
         <div className="hidden md:flex md:col-span-1 bg-brand-surface/30 border border-brand-border/40 rounded-xl p-5 flex-col gap-4">
-          <h3 className="text-sm font-bold text-slate-200">カスタム単語登録</h3>
+          <h2 className="text-sm font-bold text-slate-200">カスタム単語登録</h2>
           <form onSubmit={handleAddCustomMapping} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="custom-original" className="text-xs text-slate-400">
@@ -389,9 +389,9 @@ export function MaskTab({
         {/* 右側: 置換マップ一覧 (モバイル・PC共用 - md:col-span-2) */}
         <div className="md:col-span-2 bg-brand-surface/30 border border-brand-border/40 rounded-xl p-5 flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            <h3 className="text-sm font-bold text-slate-200">
+            <h2 className="text-sm font-bold text-slate-200">
               置換マップ一覧 ({mappings.length} 件)
-            </h3>
+            </h2>
             {excludeList.length > 0 && (
               <span className="text-xs text-brand-warning">
                 一時除外中: {excludeList.length} 件
@@ -401,7 +401,7 @@ export function MaskTab({
 
           <div className="overflow-y-auto max-h-56 border border-brand-border/20 rounded-lg bg-brand-input/40">
             {mappings.length === 0 ? (
-              <div className="p-8 text-center text-slate-500 text-sm">
+              <div className="p-8 text-center text-slate-400 text-sm">
                 現在、仮名化されたデータはありません
               </div>
             ) : (
