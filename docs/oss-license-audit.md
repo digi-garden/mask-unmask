@@ -41,3 +41,18 @@ npm run audit:oss -- --json > oss-manifest.json
 ## 初期判定
 
 **MU-COMP-005：未完了。** ロックファイルに基づく分類までは確認。ライセンス本文の正式な取得・再配布条件、出力物の組成、公開通知の要否を検証するまで適合宣言しない。
+
+## 配布物・ライセンス原文の証跡採取（追加）
+
+更新後のlockfileを基準に、ローカルで実際にインストールされた**runtimeフラグ付き**依存について、パッケージ直下のLICENSE/COPYING/NOTICE原文ファイルの有無とSHA-256を記録する。同時に本番ビルドの `dist/` 全ファイルのファイル名・バイト数・SHA-256を一覧化する。
+
+```bash
+npm ci
+npm run build
+npm run audit:distribution
+npm run audit:distribution -- --json > distribution-evidence.json
+```
+
+`npm run audit:distribution` は証跡ファイルがないruntime依存をFAILにする。検証は読み取り専用で、`dist/`へのライセンス原文の追加やデプロイはしない。監査結果を保存する場合、ファイルハッシュとパッケージ名を記録する（個人情報や秘密情報を含めない）。
+
+**証明範囲の限界**：各ハッシュは検査したローカルファイルの同一性だけを示す。開発時依存からの成果物混入、実際のバンドル内に含まれる著作物の由来、通知の法的義務、公開URLで配信されるファイルとの一致を保証しない。したがって本検査のPassだけでMU-COMP-005を完了扱いにしない。特に`parse-cache-control`のライセンス原文と、`ffmpeg-static`等の開発用依存に関する実配布への影響は別途確認する。
