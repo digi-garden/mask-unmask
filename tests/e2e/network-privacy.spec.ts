@@ -21,7 +21,7 @@ test('mask, unmask and reset issue no additional HTTP(S) requests', async ({ pag
 
   const sample = 'Please contact test@example.com about this issue.';
   await page.locator('#mask-input').fill(sample);
-  await expect(page.locator('#mask-output')).toContainText('CN_EMAIL_');
+  await expect(page.locator('#mask-output')).toHaveValue(/CN_EMAIL_/);
 
   await page.locator('#tab-unmask').click();
   await page.locator('#unmask-input').fill('Example [CN_EMAIL_0001]');
