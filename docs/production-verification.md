@@ -38,3 +38,19 @@ Node.js 20以上の`fetch`を使用。外部パッケージの追加は不要。
 ## 判定
 
 全自動検査と手動ブラウザ検証に成功し証跡を保存できるまで、MU-COMP-003は**Not Verified**のままとする。失敗があれば原因を調査して、デプロイ・ホスト側設定・アプリ実装のいずれかへ切り分ける。
+
+## 本番ブラウザの自動検証（オプトイン）
+
+```bash
+# 先にローカルでPlaywright Chromiumの準備が必要
+npx playwright install chromium
+npm run verify:production:browser
+# 他の検証用環境の場合（HTTPSかつ同じパス構成）
+MU_PRODUCTION_BROWSER_URL=https://example.org/mask-unmask/ npm run verify:production:browser
+```
+
+`scripts/verify-production-browser.mjs` は実際の公開URLをヘッドレスChromiumで開き、初期ロード完了後、固定の架空データを使ったMask・Unmask・共通クリアの操作で追加のHTTP(S)リクエストが発生しないか監視する。HTMLのCSPで `connect-src 'none'` も確認し、ブラウザのCSP違反イベントを検知する。通信先のURLはホスト・パスに限定して記録し、入力テキスト・Cookie・ストレージ・スクリーンショット・トレースは収集しない。処理は**公開サーバーへの書き込みを意図しない**が、公開ページに対してGETが発生する。
+
+実行環境から公開URLに到達できない場合やブラウザ実行に失敗した場合はFAILとして記録し、原因を調査する。成功結果には対象URL・実行日時（JST）・デプロイID／公開版の識別子を紐づけること。**このスクリプトは現在公開済みの版を検証するもので、未マージの統合PRの公開確認ではない。**
+
+テストは通常のPR CIでは実行しない。実際のChrome DevToolsによる確認、JSONエクスポートや外部リンクの操作を含む全手動項目を代替しない。サイトの同意画面や構造が変更された場合は、テストを修正して再検証する。
