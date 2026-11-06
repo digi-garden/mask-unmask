@@ -50,6 +50,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Inventory built distribution and license evidence
+        run: npm run audit:distribution
+
   e2e:
     name: End-to-end test
     runs-on: ubuntu-latest
