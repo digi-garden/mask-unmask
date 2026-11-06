@@ -14,6 +14,7 @@
     "type-check": "tsc --noEmit",
     "demo:video": "node scripts/generate-demo-video.mjs",
     "verify:production": "node scripts/verify-production.mjs",
+    "verify:production:browser": "node scripts/verify-production-browser.mjs",
     "audit:oss": "node scripts/audit-oss-lock.mjs",
     "audit:distribution": "node scripts/audit-distribution.mjs"
   },
