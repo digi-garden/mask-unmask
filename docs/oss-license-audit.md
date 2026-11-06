@@ -56,3 +56,11 @@ npm run audit:distribution -- --json > distribution-evidence.json
 `npm run audit:distribution` は証跡ファイルがないruntime依存をFAILにする。検証は読み取り専用で、`dist/`へのライセンス原文の追加やデプロイはしない。監査結果を保存する場合、ファイルハッシュとパッケージ名を記録する（個人情報や秘密情報を含めない）。
 
 **証明範囲の限界**：各ハッシュは検査したローカルファイルの同一性だけを示す。開発時依存からの成果物混入、実際のバンドル内に含まれる著作物の由来、通知の法的義務、公開URLで配信されるファイルとの一致を保証しない。したがって本検査のPassだけでMU-COMP-005を完了扱いにしない。特に`parse-cache-control`のライセンス原文と、`ffmpeg-static`等の開発用依存に関する実配布への影響は別途確認する。
+
+## MITライセンス原文の配布（追加対応）
+
+`npm run build` 内で `scripts/copy-runtime-licenses.mjs` を実行し、インストール済みの実行時依存パッケージのLICENSE/COPYING/NOTICEを**改変せず** `dist/third-party-licenses/` に複製する。パッケージ別の原文ファイル名・バージョン・lockfile上のライセンス識別子は `dist/third-party-licenses/README.md` に列挙する。原文が存在しない場合はビルドを失敗させる。
+
+現時点の対象5パッケージは `react`、`react-dom`、`scheduler`、`js-tokens`、`loose-envify`（いずれもlockfile上MIT）。**LICENSE原文に含まれる著作権表示・許諾文をそのまま維持**することを目的とする。
+
+配布先はデプロイ後に `https://circle-note.com/third-party-licenses/README.md` 等へのHTTP GETで確認しなければならない。ホスティング側での配信設定、開発依存コード由来の成果物、原文の内容と通知義務は別途検証する。ファイルを生成するだけではMU-COMP-005をPassにしない。
