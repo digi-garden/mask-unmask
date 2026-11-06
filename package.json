@@ -14,7 +14,8 @@
     "type-check": "tsc --noEmit",
     "demo:video": "node scripts/generate-demo-video.mjs",
     "verify:production": "node scripts/verify-production.mjs",
-    "audit:oss": "node scripts/audit-oss-lock.mjs"
+    "audit:oss": "node scripts/audit-oss-lock.mjs",
+    "audit:distribution": "node scripts/audit-distribution.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
