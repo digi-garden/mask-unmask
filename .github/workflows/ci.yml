@@ -38,6 +38,9 @@ jobs:
       - name: Type check
         run: npm run type-check
 
+      - name: Check production browser verification script syntax
+        run: node --check scripts/verify-production-browser.mjs
+
       - name: Run tests
         run: npm run test
 
