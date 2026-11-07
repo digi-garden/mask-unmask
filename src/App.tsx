@@ -344,7 +344,7 @@ export default function App() {
       </main>
 
       {/* フッター */}
-      <footer className="border-t border-brand-border/20 py-4 text-center text-slate-500 text-xs">
+      <footer className="border-t border-brand-border/20 py-4 text-center text-slate-400 text-xs">
         <p>&copy; 2026 digi-garden</p>
         <p className="mt-1.5 flex justify-center items-center gap-3">
           <span className="flex items-center gap-2">
