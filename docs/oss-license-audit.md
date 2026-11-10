@@ -59,8 +59,12 @@ npm run audit:distribution -- --json > distribution-evidence.json
 
 ## MITライセンス原文の配布（追加対応）
 
-`npm run build` 内で `scripts/copy-runtime-licenses.mjs` を実行し、インストール済みの実行時依存パッケージのLICENSE/COPYING/NOTICEを**改変せず** `dist/third-party-licenses/` に複製する。パッケージ別の原文ファイル名・バージョン・lockfile上のライセンス識別子は `dist/third-party-licenses/README.md` に列挙する。原文が存在しない場合はビルドを失敗させる。
+`npm run build` 内で `scripts/copy-runtime-licenses.mjs` を実行し、インストール済みの実行時依存パッケージのLICENSE/COPYING/NOTICEを**改変せず** `dist/mask-unmask/third-party-licenses/` に複製する。パッケージ別の原文ファイル名・バージョン・lockfile上のライセンス識別子は `dist/third-party-licenses/README.md` に列挙する。原文が存在しない場合はビルドを失敗させる。
 
 現時点の対象5パッケージは `react`、`react-dom`、`scheduler`、`js-tokens`、`loose-envify`（いずれもlockfile上MIT）。**LICENSE原文に含まれる著作権表示・許諾文をそのまま維持**することを目的とする。
 
-配布先はデプロイ後に `https://circle-note.com/third-party-licenses/README.md` 等へのHTTP GETで確認しなければならない。ホスティング側での配信設定、開発依存コード由来の成果物、原文の内容と通知義務は別途検証する。ファイルを生成するだけではMU-COMP-005をPassにしない。
+配布先はデプロイ後に `https://circle-note.com/mask-unmask/third-party-licenses/README.md` 等へのHTTP GETで確認しなければならない。ホスティング側での配信設定、開発依存コード由来の成果物、原文の内容と通知義務は別途検証する。ファイルを生成するだけではMU-COMP-005をPassにしない。
+
+## 配信位置と利用者導線（配布前修正）
+
+アプリは `/mask-unmask/` 配下に公開されるため、原文のコピー先を `dist/mask-unmask/third-party-licenses/` に変更し、フッターへ「OSSライセンス」のリンクを追加する。これは公開前の統合ブランチの修正であり、現行公開版には未反映。Playwrightでリンクからマニフェストと実際の原文の配信（少なくとも5件）を検証する。変更後もバンドルに含まれる開発依存の寄与・法的義務の判定および本番配信は未検証。
