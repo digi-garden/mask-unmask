@@ -58,3 +58,15 @@
 | MU-COMP-005最終Pass | **保留：リリース後の実配信と残存義務を確認して確定** |
 
 ソースの実装上の事実・上流ライセンスの一般的な要求・リリース後にしか判定できない事実を分離し、Gate Aの重大未検証をGate Bへ振り替えない。
+
+## 公開後の自動実査コマンド（リリース時のみ）
+
+```bash
+npm ci
+npm run build
+npm run verify:production:oss
+```
+
+`OSS_VERIFY_ORIGIN` は未指定なら `https://circle-note.com`。Cloudflare Pagesの検証用オリジンを対象にする場合のみ `OSS_VERIFY_ORIGIN=https://<preview-host>.pages.dev` として実行する。ローカルの `dist/mask-unmask/` と、公開された実URLのアプリHTML、バンドル出所JSON、すべてのMIT/OFL原文を1ファイルずつSHA-256照合する。意図せずHTMLフォールバックされた場合やコンテンツ相違ではFAILとする。
+
+**注意：** 別のコミットで作った `dist` と公開済みProductionを比較すると必ずしも一致しない。必ず実際にデプロイしたコミットをチェックアウトしてビルド・検証し、CloudflareのデプロイIDをリリース記録に併記する。ビルドの再現性を保証できない場合は、CIで作成した同一成果物に基づく検証を優先する。Production未公開の段階ではこのコマンドをProductionへ実行したと記載しない。
