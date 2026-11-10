@@ -102,7 +102,7 @@ for (const item of runtimeLicenses) {
     const targetName = identifier + originalName;
     const outputPath = join(noticeRoot, targetName);
     const listing = `- ${targetName}`;
-    if (!publishedManifest.split('\\n').includes(listing)) {
+    if (!publishedManifest.split('\n').includes(listing)) {
       missing.push(`${item.package}: absent manifest entry for ${targetName}`);
     }
     let actualHash = null;
