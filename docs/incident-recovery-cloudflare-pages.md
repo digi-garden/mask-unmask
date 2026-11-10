@@ -45,3 +45,41 @@
 本書は状況別判断のドキュメントであり、実行していないCloudflare操作の成功を宣言するものではない。
 
 Cloudflare公式参考：https://developers.cloudflare.com/pages/configuration/rollbacks/
+
+## 追加：具体的な封じ込め・復旧順（MU-COMP-004・008一括評価）
+
+### 対策選択の優先順位
+
+1. **安全な成功済みProductionへ切り戻せる場合**：最初にCloudflare Pagesの `Deployments > All deployments` から既知の正常Productionを特定し、SHA・deployment ID・対象ドメインとプロジェクトを照合。承認者がロールバック操作を行う。Cloudflare公式手順ではPreviewデプロイをロールバック先にできない。旧版が事故原因を含むときは実行禁止。
+2. **旧版が安全と判断できない場合**：対象の機能利用を停止し、無害な保守案内の配置かルーティング層での遮断を選ぶ。保守案内ページの配置だけで、キャッシュ済みJSや既存セッションの利用継続を抑止できるわけではない。
+3. **カスタムドメインでの緊急遮断が必要な場合**：Cloudflare WAF Custom Ruleの `Block` を候補とする。あらかじめ `http.host eq "circle-note.com"` かつ `http.request.uri.path eq "/mask-unmask"` または `starts_with(http.request.uri.path, "/mask-unmask/")` で対象パスのみに限定する方針を採る。**設定可否・適用プラン・実際の対象ゾーン権限・ルール優先順位と作用範囲は未確認**であり、運用担当の確認なしに追加/有効化しない。このルールは`*.pages.dev`の直接ドメインや既存ブラウザセッションまで遮断することを意味しない。必要な場合はPagesのプロジェクト設定・直接アクセス経路も別途対策する。
+4. **問題を修正した後**：問題の種類に応じて安全なリリース候補をCI・プレビューで検証し、明示的な承認後に本番復帰。WAF遮断を解除する場合も対象ルールを二重確認し、URL・レスポンス・CSP・匿名データでの動作とネットワーク通信を再確認。
+
+### 実行権限・未実施の扱い
+
+- このリポジトリから使えるGitHub操作はCloudflare Pagesの管理者操作を代替しない。アクセス権限、ロールバックの**実押下**、WAF設定の**作成・適用・解除**、Pages本番の**新規デプロイ**は、ユーザー/運用担当による承認・実行の記録が必要。
+- `npm run verify:recovery:candidates` は既知の2つのデプロイ固有URLのHTMLとJSを**読み取り専用**で確認し、SHA-256を記録する。Cloudflareの管理画面やDNS設定を変更しない。実際のロールバック能力、カスタムドメインの経路、権限、キャッシュ・セッションは実証しない。
+- 万一デプロイIDが別のものに変わった場合は推測でIDを書き換えず、Cloudflareの管理画面の実際のProduction履歴と対応コミットを再照合する。
+- 機密情報の外部流出事故では、画面停止やWAF遮断のみで既流出データを回収できない。脆弱性の非公開連絡・影響範囲・必要な通知や届出を別途検討する。
+
+### オペレーション記録様式
+
+| 記録項目 | 未実施時の記載 |
+|---|---|
+| 障害発見時刻・再現条件（秘密情報を除く） | NOT_RUN |
+| 対象Pagesアカウント・プロジェクト・ルートドメイン | NOT_RUN |
+| 操作者・判断者・実行許可 | NOT_RUN |
+| 事前Production deployment IDと安全性判断 | NOT_RUN |
+| 選択した処置（ロールバック / 遮断 / 保守案内 / 修正再デプロイ） | NOT_RUN |
+| 実行日時・操作対象ID・結果 | NOT_RUN |
+| `/mask-unmask/`・旧アセットのHTTP検証 | NOT_RUN |
+| `*.pages.dev`等の代替経路確認 | NOT_RUN |
+| ブラウザの既存sessionStorageとキャッシュ互換性 | NOT_RUN |
+| 復旧確認・再開承認・監視終了 | NOT_RUN |
+
+### 参照した公式仕様（2026-11確認）
+
+- Pages Rollbacks: https://developers.cloudflare.com/pages/configuration/rollbacks/
+- Cloudflare WAF Custom Rules: https://developers.cloudflare.com/waf/custom-rules/
+
+**結論：これらは停止・復旧方法の実行可能な候補と検証条件を具体化するもの。設定の存在や実効性を検証した証拠ではない。**
