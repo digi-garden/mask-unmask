@@ -7,6 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Official digi-garden identity colors. Do not reassign these to UI states.
+        identity: {
+          primary: '#216B73',
+          accent: '#F29A65',
+          background: '#FAFAF8',
+          inverse: '#153F44',
+        },
+        // Legacy brand-* classes are functional product UI semantics, not a
+        // substitute for the immutable identity palette or formal logo artwork.
         brand: {
           bg: '#0f172a',      // slate-900
           surface: '#1e293b', // slate-800
