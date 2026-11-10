@@ -39,7 +39,7 @@ jobs:
         run: npm run type-check
 
       - name: Check production browser verification script syntax
-        run: node --check scripts/verify-production-browser.mjs
+        run: node --check scripts/verify-production-browser.mjs && node --check scripts/verify-production-oss.mjs
 
       - name: Run tests
         run: npm run test
