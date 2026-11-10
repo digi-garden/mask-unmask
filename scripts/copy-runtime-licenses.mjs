@@ -17,7 +17,7 @@ const packages = Object.entries(lock.packages ?? {})
 
 if (packages.length === 0) throw new Error('No runtime dependencies found: cannot produce license notices');
 
-const dest = join(root, 'dist', 'third-party-licenses');
+const dest = join(root, 'dist', 'mask-unmask', 'third-party-licenses');
 await rm(dest, { recursive: true, force: true });
 await mkdir(dest, { recursive: true });
 const manifest = [
@@ -56,4 +56,4 @@ for (const [path, metadata] of packages) {
   manifest.push('');
 }
 await writeFile(join(dest, 'README.md'), manifest.join('\n'), 'utf8');
-console.log(`Copied original notice files for ${packages.length} runtime-classified packages into dist/third-party-licenses/`);
+console.log(`Copied original notice files for ${packages.length} runtime-classified packages into dist/mask-unmask/third-party-licenses/`);
