@@ -71,10 +71,12 @@ function bundleProvenance(): Plugin {
       for (const output of Object.values(bundle)) {
         if (output.type !== 'chunk') continue;
         for (const id of Object.keys(output.modules)) {
-          const normalized = id.replaceAll('\\\\', '/');
-          const matches = [...normalized.matchAll(/(?:^|\\/)node_modules\\/((?:@[^/]+\\/)?[^/]+)/g)];
-          if (!matches.length) continue;
-          const name = matches[matches.length - 1][1];
+          const normalized = id.replaceAll(String.fromCharCode(92), '/');
+          const nodeModulesIndex = normalized.lastIndexOf('/node_modules/');
+          if (nodeModulesIndex < 0) continue;
+          const parts = normalized.slice(nodeModulesIndex + '/node_modules/'.length).split('/');
+          const name = parts[0]?.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0];
+          if (!name) continue;
           const metadata = lock.packages[`node_modules/${name}`];
           if (!metadata) {
             throw new Error(`Bundled dependency not found in lockfile: ${name}`);
@@ -95,7 +97,7 @@ function bundleProvenance(): Plugin {
       }
       this.emitFile({
         type: 'asset',
-        fileName: 'third-party-licenses/bundle-provenance.json',
+        fileName: 'bundle-provenance.json',
         source: JSON.stringify({
           source: 'Rollup output chunk module IDs and package-lock metadata; not a legal conclusion',
           packages: result,
