@@ -16,7 +16,8 @@
     "verify:production": "node scripts/verify-production.mjs",
     "verify:production:browser": "node scripts/verify-production-browser.mjs",
     "audit:oss": "node scripts/audit-oss-lock.mjs",
-    "audit:distribution": "node scripts/audit-distribution.mjs"
+    "audit:distribution": "node scripts/audit-distribution.mjs",
+    "verify:production:oss": "node scripts/verify-production-oss.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
