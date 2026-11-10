@@ -124,7 +124,46 @@ for (const item of runtimeLicenses) {
     });
   }
 }
-const expectedNoticeFiles = new Set(copiedNoticeEvidence.map((item) => item.distributed));
+// Embedded Manrope font in the distributed digi-garden logo needs its own OFL notice.
+const manropeOriginal = join(root, 'licenses', 'manrope', 'OFL.txt');
+const manropeCopy = join(noticeRoot, 'Manrope-OFL.txt');
+let manropeOriginalHash = null;
+let manropeCopyHash = null;
+try { manropeOriginalHash = await digest(manropeOriginal); } catch { missing.push('licenses/manrope/OFL.txt: missing original Manrope notice'); }
+try { manropeCopyHash = await digest(manropeCopy); } catch { missing.push('Manrope-OFL.txt: missing distributed Manrope notice'); }
+if (manropeOriginalHash !== null && manropeCopyHash !== null && manropeOriginalHash !== manropeCopyHash) {
+  missing.push('Manrope-OFL.txt: notice differs from original');
+}
+if (!publishedManifest.includes('Notice file: Manrope-OFL.txt')) missing.push('Missing Manrope entry in notice manifest');
+const logoSvg = await readFile(join(distRoot, 'mask-unmask', 'digi-garden-logo.svg'), 'utf8');
+if (!logoSvg.includes('data:font/woff2;base64,')) missing.push('Expected embedded WOFF2 payload not found in digi-garden logo; review notice applicability');
+const manropeNoticeEvidence = { originalSha256: manropeOriginalHash, distributedSha256: manropeCopyHash, matches: manropeOriginalHash !== null && manropeOriginalHash === manropeCopyHash };
+
+// Inspect the Rollup module graph artifact rather than trusting the build log.
+const provenancePath = join(distRoot, 'mask-unmask', 'bundle-provenance.json');
+let bundleProvenance = null;
+try {
+  bundleProvenance = JSON.parse(await readFile(provenancePath, 'utf8'));
+  if (!Array.isArray(bundleProvenance.packages) || bundleProvenance.packages.length === 0) {
+    missing.push('bundle-provenance.json: empty or missing package list');
+  } else {
+    for (const item of bundleProvenance.packages) {
+      const original = lock.packages?.[`node_modules/${item.name}`];
+      if (!original || original.version !== item.version || original.license !== item.license || original.dev === true || item.development || item.license !== 'MIT') {
+        missing.push(`Unexpected bundle dependency metadata: ${item.name}@${item.version}`);
+      }
+      if (!Number.isSafeInteger(item.moduleCount) || item.moduleCount < 1) missing.push(`Invalid module count for ${item.name}`);
+    }
+  }
+} catch (error) { missing.push(`bundle-provenance.json missing/invalid: ${error.message}`); }
+// The demo video binary and project development tools must not be shipped.
+for (const file of files) {
+  if (/\\.(?:exe|dll|node|wasm|mp4|mov)$/i.test(file.path) || /(?:^|\\/)ffmpeg(?:[.-]|\\/)/i.test(file.path)) {
+    missing.push(`Review unexpected executable/video in static distribution: ${file.path}`);
+  }
+}
+
+const expectedNoticeFiles = new Set([...copiedNoticeEvidence.map((item) => item.distributed), 'mask-unmask/third-party-licenses/Manrope-OFL.txt']);
 for (const file of files) {
   if (file.path.startsWith('mask-unmask/third-party-licenses/') &&
     file.path !== 'mask-unmask/third-party-licenses/README.md' &&
@@ -137,6 +176,8 @@ const report = {
   source: 'installed node_modules and locally built dist (not deployed production)',
   runtimeLicenseEvidence: runtimeLicenses,
   copiedNoticeEvidence,
+  manropeNoticeEvidence,
+  bundleProvenance,
   distFiles: files,
   missingRuntimeLicenseEvidence: missing,
   caveat: 'Hashes prove inspected files only; bundling origin, notice requirements, deployed bytes and legal compliance require separate review.',
@@ -149,6 +190,8 @@ if (process.argv.includes('--json')) {
     console.log(`  ${item.package}@${item.version} [${item.lockfileLicense ?? 'UNKNOWN'}]: ${item.files.map((f) => f.path).join(', ') || 'NONE'}`);
   }
   console.log(`Verified distributed license originals: ${copiedNoticeEvidence.filter((item) => item.matches).length}/${copiedNoticeEvidence.length}`);
+  console.log(`Embedded Manrope OFL notice matches: ${manropeNoticeEvidence.matches}`);
+  console.log(`Rollup package origins verified: ${bundleProvenance?.packages?.map((item) => item.name).join(', ') ?? 'NONE'}`);
   console.log(`Distribution files inventoried: ${files.length}`);
   for (const file of files) console.log(`  ${file.path} (${file.bytes} bytes, SHA256 ${file.sha256})`);
   for (const item of missing) console.error(`FAIL: ${item}`);
