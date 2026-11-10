@@ -101,7 +101,7 @@ function bundleProvenance(): Plugin {
         source: JSON.stringify({
           source: 'Rollup output chunk module IDs and package-lock metadata; not a legal conclusion',
           packages: result,
-        }, null, 2) + '\\n',
+        }, null, 2) + '\n',
       });
       console.log(`Bundled third-party dependency origins: ${result.map((item) => `${item.name}@${item.version}`).join(', ')}`);
     },
