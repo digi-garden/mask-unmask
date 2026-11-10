@@ -71,7 +71,7 @@ function bundleProvenance(): Plugin {
       for (const output of Object.values(bundle)) {
         if (output.type !== 'chunk') continue;
         for (const id of Object.keys(output.modules)) {
-          const normalized = id.replaceAll(String.fromCharCode(92), '/');
+          const normalized = id.split(String.fromCharCode(92)).join('/');
           const nodeModulesIndex = normalized.lastIndexOf('/node_modules/');
           if (nodeModulesIndex < 0) continue;
           const parts = normalized.slice(nodeModulesIndex + '/node_modules/'.length).split('/');
