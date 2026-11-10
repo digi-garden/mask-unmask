@@ -68,3 +68,9 @@ npm run audit:distribution -- --json > distribution-evidence.json
 ## 配信位置と利用者導線（配布前修正）
 
 アプリは `/mask-unmask/` 配下に公開されるため、原文のコピー先を `dist/mask-unmask/third-party-licenses/` に変更し、フッターへ「OSSライセンス」のリンクを追加する。これは公開前の統合ブランチの修正であり、現行公開版には未反映。Playwrightでリンクからマニフェストと実際の原文の配信（少なくとも5件）を検証する。変更後もバンドルに含まれる開発依存の寄与・法的義務の判定および本番配信は未検証。
+
+## 原文同一性の自動照合
+
+`npm run audit:distribution` は、ローカルの `node_modules` に存在する実行時依存の各LICENSE/COPYING/NOTICE原文と、`dist/mask-unmask/third-party-licenses/` にコピーされたファイルを SHA-256 で一対一照合する。マニフェストに全対象が掲載され、余計な通知ファイルが混入していないことも確認する。一致しなければCIを失敗させる。`--json` には `copiedNoticeEvidence` を追加して原文と配布先それぞれのハッシュを記録する。
+
+**限界：** この検査はローカルビルドの原文同一性を確認するものであり、開発依存からのバンドル取り込み、通知義務の法的判断、本番CDNでの配信を証明しない。これらはMU-COMP-005の未了事項として残す。
