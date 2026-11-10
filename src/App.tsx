@@ -376,6 +376,13 @@ export default function App() {
           </a>
           <span className="text-slate-700">|</span>
           <a
+            href={`${APP_PUBLIC_ASSET_BASE}third-party-licenses/README.md`}
+            className="text-slate-400 underline decoration-slate-600 underline-offset-2 transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
+          >
+            OSSライセンス
+          </a>
+          <span className="text-slate-700">|</span>
+          <a
             href="https://digi-garden.com/terms/"
             target="_blank"
             rel="noopener noreferrer"
