@@ -346,7 +346,7 @@ export default function App() {
       {/* フッター */}
       <footer className="border-t border-brand-border/20 py-4 text-center text-slate-400 text-xs">
         <p>&copy; 2026 digi-garden</p>
-        <p className="mt-1.5 flex justify-center items-center gap-3">
+        <p className="mt-1.5 flex flex-wrap justify-center items-center gap-3">
           <span className="flex items-center gap-2">
             <span>提供：</span>
             <a
@@ -354,7 +354,7 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="digi-garden（デジガーデン）のWebサイトを開く"
-              className="inline-flex items-center rounded-md bg-identity-background px-2 py-1.5 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
+              className="inline-flex shrink-0 items-center rounded-md bg-identity-background px-2 py-1.5 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
             >
               <img
                 src={`${APP_PUBLIC_ASSET_BASE}digi-garden-logo.svg`}
