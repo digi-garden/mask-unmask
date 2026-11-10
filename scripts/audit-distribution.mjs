@@ -136,7 +136,12 @@ if (manropeOriginalHash !== null && manropeCopyHash !== null && manropeOriginalH
 }
 if (!publishedManifest.includes('Notice file: Manrope-OFL.txt')) missing.push('Missing Manrope entry in notice manifest');
 const logoSvg = await readFile(join(distRoot, 'mask-unmask', 'digi-garden-logo.svg'), 'utf8');
-if (!logoSvg.includes('data:font/woff2;base64,')) missing.push('Expected embedded WOFF2 payload not found in digi-garden logo; review notice applicability');
+const embeddedSvgMarker = 'data:image/svg+xml;base64,';
+const encodedImage = logoSvg.split(embeddedSvgMarker)[1]?.split('"')[0] ?? '';
+const innerSvg = encodedImage ? Buffer.from(encodedImage, 'base64').toString('utf8') : '';
+if (!innerSvg.includes('data:font/woff2;base64,')) {
+  missing.push('Expected WOFF2 payload not found in nested base64 SVG in digi-garden logo; review notice applicability');
+}
 const manropeNoticeEvidence = { originalSha256: manropeOriginalHash, distributedSha256: manropeCopyHash, matches: manropeOriginalHash !== null && manropeOriginalHash === manropeCopyHash };
 
 // Inspect the Rollup module graph artifact rather than trusting the build log.
