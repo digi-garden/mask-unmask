@@ -55,5 +55,16 @@ for (const [path, metadata] of packages) {
   }
   manifest.push('');
 }
+
+// The public digi-garden SVG embeds the Manrope font as base64 WOFF2 data.
+// Preserve the upstream SIL OFL notice next to npm dependency notices.
+const manropeNotice = 'Manrope-OFL.txt';
+await copyFile(join(root, 'licenses', 'manrope', 'OFL.txt'), join(dest, manropeNotice));
+manifest.push('## Embedded Manrope font (SIL Open Font License 1.1)');
+manifest.push('The digi-garden logo embeds a Manrope font payload; this notice covers that font.');
+manifest.push('Source: https://github.com/google/fonts/blob/main/ofl/manrope/OFL.txt');
+manifest.push('Notice file: ' + manropeNotice);
+manifest.push('');
+
 await writeFile(join(dest, 'README.md'), manifest.join('\n'), 'utf8');
 console.log(`Copied original notice files for ${packages.length} runtime-classified packages into dist/mask-unmask/third-party-licenses/`);
