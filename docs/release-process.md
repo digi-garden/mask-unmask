@@ -4,7 +4,7 @@
 
 本書はMask & Unmask固有の配布・検証・障害時の復旧手順を記録するものです。リリース可否の判定基準は、digi-garden共通規約 v1.1（`digi-garden/brand-assets`、固定コミット `31bf40e921661c9c8e7b246434b349ad71c7c578`）の `templates/release/product-release-checklist.md` を**唯一のマスターチェックリスト**として使用します。本書のチェック項目でGate Aの要件を代替・緩和しません。
 
-本プロダクトは公開Web版であり、README記載の公開URLは `https://circle-note.com/mask-unmask/` です。現在のホスティングサービス、デプロイ自動化、公開停止方法、復元機能の詳細は本書作成時点で**未検証**です。必ず運用担当が確認した実際のサービス・画面に合わせてリリース記録へ入力してください。未確認のまま公開操作・ロールバック操作を実施しないでください。
+本プロダクトは公開Web版であり、README記載の公開URLは `https://circle-note.com/mask-unmask/` です。現在のホスティングはCloudflare Pages（プロジェクト `mask-unmask`、GitHub `main` をProductionへ自動配信）と確認済みです。過去成功Productionの動作とロールバック操作メニューの表示は確認していますが、**実際の本番ロールバックおよび公開停止・遮断の権限と実効性は未検証**です。直前正常版のID・画面設定・適用権限を運用担当が必ず再確認し、未確認のまま公開操作・ロールバック操作を実施しないでください。詳細は `docs/incident-recovery-cloudflare-pages.md` と `docs/recovery-closeout-assessment.md` に記録します。
 
 ## 通常リリース（実行順）
 
