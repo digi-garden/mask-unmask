@@ -15,6 +15,20 @@ test('OSS notices are linked from the app and served beneath its deployment path
     expect(section, `Missing manifest entry for ${pkg}`).toBeDefined();
   }
 
+  expect(manifest).toContain('Embedded Manrope font');
+  expect(manifest).toContain('Notice file: Manrope-OFL.txt');
+  const fontResponse = await request.get('/mask-unmask/third-party-licenses/Manrope-OFL.txt');
+  expect(fontResponse.ok()).toBeTruthy();
+  expect(await fontResponse.text()).toContain('SIL OPEN FONT LICENSE Version 1.1');
+  const provenanceResponse = await request.get('/mask-unmask/bundle-provenance.json');
+  expect(provenanceResponse.ok()).toBeTruthy();
+  const provenance = await provenanceResponse.json() as { packages: Array<{ name: string; license: string; development: boolean }> };
+  expect(provenance.packages.length).toBeGreaterThanOrEqual(3);
+  for (const item of provenance.packages) {
+    expect(item.license).toBe('MIT');
+    expect(item.development).toBe(false);
+  }
+
   const listedFiles = [...manifest.matchAll(/^- (.+)$/gm)].map((match) => match[1]);
   expect(listedFiles.length).toBeGreaterThanOrEqual(5);
   for (const file of listedFiles) {
