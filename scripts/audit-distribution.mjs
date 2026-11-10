@@ -158,7 +158,11 @@ try {
 } catch (error) { missing.push(`bundle-provenance.json missing/invalid: ${error.message}`); }
 // The demo video binary and project development tools must not be shipped.
 for (const file of files) {
-  if (/\\.(?:exe|dll|node|wasm|mp4|mov)$/i.test(file.path) || /(?:^|\\/)ffmpeg(?:[.-]|\\/)/i.test(file.path)) {
+  const pathname = file.path.toLowerCase();
+  const forbiddenExtension = ['.exe', '.dll', '.node', '.wasm', '.mp4', '.mov']
+    .some((ext) => pathname.endsWith(ext));
+  const ffmpegFile = pathname.split('/').some((part) => part === 'ffmpeg' || part.startsWith('ffmpeg-'));
+  if (forbiddenExtension || ffmpegFile) {
     missing.push(`Review unexpected executable/video in static distribution: ${file.path}`);
   }
 }
