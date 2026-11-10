@@ -81,9 +81,62 @@ if (files.length === 0) {
   process.exit(1);
 }
 
+// Independently verify that the notices shipped beneath the application URL
+// match the actual installed package originals byte-for-byte. The copy step
+// alone is not evidence that the distribution contains the correct notices.
+const noticeRoot = join(distRoot, 'mask-unmask', 'third-party-licenses');
+const copiedNoticeEvidence = [];
+let publishedManifest = '';
+try {
+  publishedManifest = await readFile(join(noticeRoot, 'README.md'), 'utf8');
+} catch {
+  missing.push('dist/mask-unmask/third-party-licenses/README.md: missing public notice manifest');
+}
+for (const item of runtimeLicenses) {
+  const identifier = item.package.replaceAll('/', '__') + '-' + item.version + '-';
+  if (!publishedManifest.includes(`## ${item.package}@${item.version} (lockfile: ${item.lockfileLicense ?? 'UNKNOWN'})`)) {
+    missing.push(`${item.package}@${item.version}: not listed in public notice manifest`);
+  }
+  for (const file of item.files) {
+    const originalName = file.path.slice(file.path.lastIndexOf('/') + 1);
+    const targetName = identifier + originalName;
+    const outputPath = join(noticeRoot, targetName);
+    const listing = `- ${targetName}`;
+    if (!publishedManifest.split('\\n').includes(listing)) {
+      missing.push(`${item.package}: absent manifest entry for ${targetName}`);
+    }
+    let actualHash = null;
+    try {
+      actualHash = await digest(outputPath);
+    } catch {
+      missing.push(`${item.package}: missing distributed notice ${targetName}`);
+    }
+    if (actualHash !== null && actualHash !== file.sha256) {
+      missing.push(`${item.package}: distributed notice differs from installed original ${targetName}`);
+    }
+    copiedNoticeEvidence.push({
+      package: item.package,
+      original: file.path,
+      distributed: `mask-unmask/third-party-licenses/${targetName}`,
+      originalSha256: file.sha256,
+      distributedSha256: actualHash,
+      matches: actualHash === file.sha256,
+    });
+  }
+}
+const expectedNoticeFiles = new Set(copiedNoticeEvidence.map((item) => item.distributed));
+for (const file of files) {
+  if (file.path.startsWith('mask-unmask/third-party-licenses/') &&
+    file.path !== 'mask-unmask/third-party-licenses/README.md' &&
+    !expectedNoticeFiles.has(file.path)) {
+    missing.push(`Unexpected distribution notice file: ${file.path}`);
+  }
+}
+
 const report = {
   source: 'installed node_modules and locally built dist (not deployed production)',
   runtimeLicenseEvidence: runtimeLicenses,
+  copiedNoticeEvidence,
   distFiles: files,
   missingRuntimeLicenseEvidence: missing,
   caveat: 'Hashes prove inspected files only; bundling origin, notice requirements, deployed bytes and legal compliance require separate review.',
@@ -95,6 +148,7 @@ if (process.argv.includes('--json')) {
   for (const item of runtimeLicenses) {
     console.log(`  ${item.package}@${item.version} [${item.lockfileLicense ?? 'UNKNOWN'}]: ${item.files.map((f) => f.path).join(', ') || 'NONE'}`);
   }
+  console.log(`Verified distributed license originals: ${copiedNoticeEvidence.filter((item) => item.matches).length}/${copiedNoticeEvidence.length}`);
   console.log(`Distribution files inventoried: ${files.length}`);
   for (const file of files) console.log(`  ${file.path} (${file.bytes} bytes, SHA256 ${file.sha256})`);
   for (const item of missing) console.error(`FAIL: ${item}`);
