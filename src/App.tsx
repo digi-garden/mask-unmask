@@ -354,7 +354,7 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="digi-garden（デジガーデン）のWebサイトを開く"
-              className="inline-flex rounded transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
+              className="inline-flex items-center rounded-md bg-identity-background px-2 py-1.5 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
             >
               <img
                 src={`${APP_PUBLIC_ASSET_BASE}digi-garden-logo.svg`}
