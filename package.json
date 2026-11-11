@@ -5,14 +5,22 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/prepare-build.mjs && vite build && node scripts/finalize-build.mjs && node scripts/verify-build-headers.mjs && node scripts/verify-build-redirects.mjs",
+    "build": "node scripts/prepare-build.mjs && vite build && node scripts/finalize-build.mjs && node scripts/copy-runtime-licenses.mjs && node scripts/verify-build-headers.mjs && node scripts/verify-build-redirects.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:perf": "vitest run src/utils/maskEngine.perf.test.ts",
     "test:e2e": "npm run build && playwright test",
     "type-check": "tsc --noEmit",
-    "demo:video": "node scripts/generate-demo-video.mjs"
+    "demo:video": "node scripts/generate-demo-video.mjs",
+    "verify:production": "node scripts/verify-production.mjs",
+    "verify:production:browser": "node scripts/verify-production-browser.mjs",
+    "audit:oss": "node scripts/audit-oss-lock.mjs",
+    "audit:distribution": "node scripts/audit-distribution.mjs",
+    "verify:production:oss": "node scripts/verify-production-oss.mjs",
+    "verify:recovery:candidates": "node scripts/verify-recovery-candidates.mjs",
+    "audit:production-deps": "npm audit --omit=dev --audit-level=high",
+    "scan:dist:secrets": "node scripts/scan-dist-secrets.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -23,6 +31,7 @@
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^22.20.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^6.0.5",

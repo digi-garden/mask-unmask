@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+      - integration/mu-compliance-acceptance
 
 permissions:
   contents: read
@@ -37,14 +38,37 @@ jobs:
       - name: Type check
         run: npm run type-check
 
+      - name: Check production browser verification script syntax
+        run: node --check scripts/verify-production-browser.mjs && node --check scripts/verify-production-oss.mjs && node --check scripts/verify-recovery-candidates.mjs && node --check scripts/scan-dist-secrets.mjs
+
       - name: Run tests
         run: npm run test
 
       - name: Run performance test
         run: npm run test:perf
 
+      - name: Audit production dependencies (high and critical)
+        run: npm run audit:production-deps
+
+      - name: Audit OSS lockfile metadata
+        run: npm run audit:oss
+
       - name: Build
         run: npm run build
+
+      - name: Inventory built distribution and license evidence
+        run: npm run audit:distribution
+
+      - name: Scan built distribution for credential signatures
+        run: npm run scan:dist:secrets
+
+      - name: Preserve inspected release distribution
+        uses: actions/upload-artifact@v4
+        with:
+          name: mask-unmask-dist-${{ github.event.pull_request.head.sha || github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
 
   e2e:
     name: End-to-end test
