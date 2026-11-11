@@ -39,13 +39,16 @@ jobs:
         run: npm run type-check
 
       - name: Check production browser verification script syntax
-        run: node --check scripts/verify-production-browser.mjs && node --check scripts/verify-production-oss.mjs && node --check scripts/verify-recovery-candidates.mjs
+        run: node --check scripts/verify-production-browser.mjs && node --check scripts/verify-production-oss.mjs && node --check scripts/verify-recovery-candidates.mjs && node --check scripts/scan-dist-secrets.mjs
 
       - name: Run tests
         run: npm run test
 
       - name: Run performance test
         run: npm run test:perf
+
+      - name: Audit production dependencies (high and critical)
+        run: npm run audit:production-deps
 
       - name: Audit OSS lockfile metadata
         run: npm run audit:oss
@@ -55,6 +58,9 @@ jobs:
 
       - name: Inventory built distribution and license evidence
         run: npm run audit:distribution
+
+      - name: Scan built distribution for credential signatures
+        run: npm run scan:dist:secrets
 
   e2e:
     name: End-to-end test
