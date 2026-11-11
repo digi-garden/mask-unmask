@@ -18,7 +18,9 @@
     "audit:oss": "node scripts/audit-oss-lock.mjs",
     "audit:distribution": "node scripts/audit-distribution.mjs",
     "verify:production:oss": "node scripts/verify-production-oss.mjs",
-    "verify:recovery:candidates": "node scripts/verify-recovery-candidates.mjs"
+    "verify:recovery:candidates": "node scripts/verify-recovery-candidates.mjs",
+    "audit:production-deps": "npm audit --omit=dev --audit-level=high",
+    "scan:dist:secrets": "node scripts/scan-dist-secrets.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
