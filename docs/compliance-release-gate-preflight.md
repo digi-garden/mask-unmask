@@ -1,5 +1,7 @@
 # Mask & Unmask：v1.1適合性・リリースGate A/B暫定判定（2026-11-10）
 
+> **更新注記（2026-11-11）**：本書の各行は2026-11-10時点の暫定評価であり、MU-COMP-005・006・007・004/008の技術的是正が後続PRで進行している。最新の個別証跡は `docs/mu-comp-005-007-closeout.md`、`docs/oss-distribution-compliance-final-review.md`、`docs/brand-ui-exception-assessment.md`、`docs/recovery-closeout-assessment.md` を参照する。後続文書によっても**未公開ビルドのProduction検証・実アカウント設定・実ロールバックをPassにはできない**。本書を現時点の最終Gate判定と解釈しない。
+
 > **リリース判定ではなく事前レビュー**。以下は現時点で確認できた証跡に限定する。最終リリース候補のSHA・ビルドID・法令確認・公開後結果を埋める前に正式Passにしない。
 >
 > 唯一の判定マスター：`digi-garden/brand-assets` commit `31bf40e921661c9c8e7b246434b349ad71c7c578` の `templates/release/product-release-checklist.md`。同文書の全確認事項を順序通り列挙する。
