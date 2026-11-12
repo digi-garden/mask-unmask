@@ -12,7 +12,7 @@
 - standaloneのトップ `/` は意図的にアプリのトップとして使用しない。アプリは `/mask-unmask/` で提供する。
 - Router Workerは現行の `rewrite: 'preserve'` を継続する。Phase 4で `strip` へ変更しない。
 - `/mask-unmask` → `/mask-unmask/` は公開Workerで308。Pages単体では301。
-- `/mask-unmask/safety-and-privacy` はPagesの200 rewriteでSPA HTMLを返す。
+- `/mask-unmask/safety-and-privacy` は専用の静的 `safety-and-privacy.html`（SPAエントリの複製）をPagesの拡張子なしURLで配信する。`_redirects` から `index.html` へ200 rewriteするとPagesの308正規化でアプリトップへ戻されるため採用しない。
 
 ## Pagesの導入方法
 既存 `mask-unmask.pages.dev` をこの時点で上書きしない。**別の独立検証用Pagesプロジェクト**を同じGitHubリポジトリから構築し、build command `npm run build:standalone`、output directory `dist-standalone`、branchはこの専用ブランチを指定する。
@@ -31,3 +31,7 @@ GitHub PR検証と `npm run build:standalone`、`node scripts/verify-standalone.
 
 ## 運用注意
 デフォルトブランチ `main` の既存Pagesへの自動デプロイを考慮し、PRをマージしても既存のビルドコマンドを変更しない。旧ポータル生成は本番切替完了後の別PRで除去する。
+
+## 配信検証での不具合と対策（2026-11-12）
+
+初回standalone Pagesで`/mask-unmask/safety-and-privacy`が308で`/mask-unmask/`へ遷移することを確認。原因はPagesの`index.html` URL正規化と200 rewriteの干渉と考えられる。対策として、ビルド時に`mask-unmask/safety-and-privacy.html`を生成し、拡張子なしの同パスで直接200を返す。実配信の`curl -I`、`curl -L`、リロードおよびページ内容の検証が完了するまで修正完了としない。
