@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-function attachBrowserDiagnostics(page: Page) {
+async function attachBrowserDiagnostics(page: Page) {
   const errors: string[] = [];
   const violations: string[] = [];
   const foreignRequests: string[] = [];
@@ -17,7 +17,7 @@ function attachBrowserDiagnostics(page: Page) {
     if (message.type() === 'error') errors.push(message.text());
   });
   page.on('requestfailed', (request) => errors.push(`Request failed: ${new URL(request.url()).pathname}`));
-  void page.addInitScript(() => {
+  await page.addInitScript(() => {
     window.addEventListener('securitypolicyviolation', (event) => {
       (window as unknown as { __cspFailures?: string[] }).__cspFailures ??= [];
       (window as unknown as { __cspFailures: string[] }).__cspFailures.push(event.violatedDirective);
@@ -35,7 +35,7 @@ function attachBrowserDiagnostics(page: Page) {
 }
 
 test('P5-01: portal links to the published Mask app, not planned apps', async ({ page }) => {
-  const diag = attachBrowserDiagnostics(page);
+  const diag = await attachBrowserDiagnostics(page);
   const response = await page.goto('/');
   expect(response?.status()).toBe(200);
   await expect(page.getByRole('heading', { name: 'CircleNote', exact: true })).toBeVisible();
@@ -50,7 +50,7 @@ test('P5-01: portal links to the published Mask app, not planned apps', async ({
 });
 
 test('P5-02: Mask/Unmask, map export, and no extra HTTP traffic after load', async ({ page }) => {
-  const diag = attachBrowserDiagnostics(page);
+  const diag = await attachBrowserDiagnostics(page);
   const response = await page.goto('/mask-unmask/');
   expect(response?.status()).toBe(200);
   await page.waitForLoadState('networkidle');
@@ -75,7 +75,7 @@ test('P5-02: Mask/Unmask, map export, and no extra HTTP traffic after load', asy
 });
 
 test('P5-03: privacy deep link survives reload and return navigation', async ({ page }) => {
-  const diag = attachBrowserDiagnostics(page);
+  const diag = await attachBrowserDiagnostics(page);
   const response = await page.goto('/mask-unmask/safety-and-privacy');
   expect(response?.status()).toBe(200);
   await expect(page.getByText('安全性とプライバシーについて', { exact: true })).toBeVisible();
@@ -89,7 +89,7 @@ test('P5-03: privacy deep link survives reload and return navigation', async ({ 
 });
 
 test('P5-04: VRAM calculator responds to changed inputs', async ({ page }) => {
-  const diag = attachBrowserDiagnostics(page);
+  const diag = await attachBrowserDiagnostics(page);
   const response = await page.goto('/vram-calculator/');
   expect(response?.status()).toBe(200);
   await expect(page.getByRole('heading', { name: 'VRAM計算機' })).toBeVisible();
