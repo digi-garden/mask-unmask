@@ -110,12 +110,22 @@ test('P5-04: VRAM calculator responds to changed inputs', async ({ page }) => {
   expect(response?.status()).toBe(200);
   await expect(page.getByRole('heading', { name: 'VRAM計算機' })).toBeVisible();
   await expect(page.locator('[data-testid="breakdown"]')).toBeVisible();
-  const initial = await page.locator('[data-testid="breakdown"]').innerText();
+  // 'reserved' reduces available GPU capacity, not the model's required VRAM.
+  // The breakdown stays unchanged; the available capacity and verdict may change.
+  const initialBreakdown = await page.locator('[data-testid="breakdown"]').innerText();
+  const initialSummary = await page.locator('section[aria-labelledby="result-heading"]').innerText();
   await page.locator('#reserved').fill('5');
-  await expect.poll(async () => page.locator('[data-testid="breakdown"]').innerText())
-    .not.toBe(initial);
+  await expect(page.locator('#reserved')).toHaveValue('5');
+  await expect.poll(async () =>
+    page.locator('section[aria-labelledby="result-heading"]').innerText(),
+  ).not.toBe(initialSummary);
+  await expect(page.locator('section[aria-labelledby="result-heading"]')).toContainText('使える容量 7.0 GB');
+  await expect(page.locator('[data-testid="breakdown"]')).toHaveText(initialBreakdown);
   await page.getByRole('button', { name: '入力をリセット' }).click();
   await expect(page.locator('#reserved')).not.toHaveValue('5');
+  await expect.poll(async () =>
+    page.locator('section[aria-labelledby="result-heading"]').innerText(),
+  ).toBe(initialSummary);
   await diag.assertClean();
 });
 
