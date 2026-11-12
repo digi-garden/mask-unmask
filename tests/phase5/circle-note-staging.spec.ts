@@ -120,7 +120,8 @@ test('P5-04: VRAM calculator responds to changed inputs', async ({ page }) => {
     page.locator('section[aria-labelledby="result-heading"]').innerText(),
   ).not.toBe(initialSummary);
   await expect(page.locator('section[aria-labelledby="result-heading"]')).toContainText('使える容量 7.0 GB');
-  await expect(page.locator('[data-testid="breakdown"]')).toHaveText(initialBreakdown);
+  await expect.poll(async () => page.locator('[data-testid="breakdown"]').innerText())
+    .toBe(initialBreakdown);
   await page.getByRole('button', { name: '入力をリセット' }).click();
   await expect(page.locator('#reserved')).not.toHaveValue('5');
   await expect.poll(async () =>
