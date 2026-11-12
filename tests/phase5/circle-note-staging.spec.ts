@@ -69,6 +69,22 @@ test('P5-02: Mask/Unmask, map export, and no extra HTTP traffic after load', asy
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: '同意してエクスポート' }).click();
   expect((await download).suggestedFilename()).toMatch(/^mask-unmask-map-.*\.json$/);
+  const importPayload = JSON.stringify({
+    version: '1.0',
+    createdAt: '2026-11-02T00:00:00Z',
+    mappings: [{
+      tag: '[CN_EMAIL_0002]',
+      original: 'imported-test@example.org',
+      category: 'EMAIL',
+    }],
+  });
+  await page.locator('input[aria-label="マッピングファイルをインポート"]').setInputFiles({
+    name: 'phase5-test-map.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(importPayload, 'utf8'),
+  });
+  await expect(page.getByRole('button', { name: 'インポート確定' })).toBeVisible();
+  await page.getByRole('button', { name: 'インポート確定' }).click();
   await page.waitForTimeout(700);
   expect(traffic, 'No HTTP(S) requests after app load during user-data operations').toEqual([]);
   await diag.assertClean();
