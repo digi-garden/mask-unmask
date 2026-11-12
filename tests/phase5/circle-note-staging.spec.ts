@@ -3,6 +3,15 @@ import { expect, test, type Page } from '@playwright/test';
 function attachBrowserDiagnostics(page: Page) {
   const errors: string[] = [];
   const violations: string[] = [];
+  const foreignRequests: string[] = [];
+  const approvedOrigin = new URL(process.env.CIRCLE_NOTE_STAGING_URL ??
+    'https://circle-note-router-staging.masato-okada.workers.dev').origin;
+  page.on('request', (request) => {
+    if (/^https?:\/\//i.test(request.url()) &&
+        new URL(request.url()).origin !== approvedOrigin) {
+      foreignRequests.push(`${request.method()} ${new URL(request.url()).origin}`);
+    }
+  });
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(message.text());
@@ -19,6 +28,7 @@ function attachBrowserDiagnostics(page: Page) {
       violations.push(...await page.evaluate(() =>
         (window as unknown as { __cspFailures?: string[] }).__cspFailures ?? []));
       expect(errors, 'Browser JS/console/network failures').toEqual([]);
+      expect(foreignRequests, 'Unexpected cross-origin browser requests').toEqual([]);
       expect(violations, 'Browser CSP violations').toEqual([]);
     },
   };
