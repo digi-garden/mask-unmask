@@ -22,7 +22,8 @@
     "audit:production-deps": "npm audit --omit=dev --audit-level=high",
     "scan:dist:secrets": "node scripts/scan-dist-secrets.mjs",
     "build:standalone": "npm run build && node scripts/build-standalone.mjs && node scripts/verify-standalone.mjs",
-    "test:phase5": "playwright test --config playwright.phase5.config.ts"
+    "test:phase5": "playwright test --config playwright.phase5.config.ts",
+    "test:production-vram": "playwright test --config playwright.production-vram.config.ts"
   },
   "dependencies": {
     "react": "^18.3.1",
