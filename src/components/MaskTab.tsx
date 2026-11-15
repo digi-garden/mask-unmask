@@ -12,6 +12,8 @@ interface MaskTabProps {
   excludeList: string[];
   onUpdateExcludeList: (list: string[]) => void;
   showToast: (message: string) => void;
+  /** Legacy callback retained for existing callers; privacy navigation now lives in App. */
+  onNavigate?: (path: string) => void;
 }
 
 export function MaskTab({
