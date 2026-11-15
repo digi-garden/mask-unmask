@@ -176,7 +176,7 @@ test.describe('Mask & Unmask E2E Flow', () => {
     const toolHomeLink = page.getByRole('banner').getByRole('link', { name: 'Mask & Unmask' });
     await expect(toolHomeLink).toBeVisible();
     await toolHomeLink.click();
-    await expect(page).toHaveURL(/\\/mask-unmask\\/$/);
+    await expect(page).toHaveURL(/\/mask-unmask\/$/);
 
     // 6. 直接アクセスの確認
     await page.goto('/mask-unmask/safety-and-privacy');
