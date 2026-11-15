@@ -194,7 +194,18 @@ export default function App() {
                 CircleNote
               </a>
               <span className="text-cn-border-strong" aria-hidden="true">/</span>
-              <span className="text-base font-bold text-cn-text">Mask &amp; Unmask</span>
+              <h1 className="text-base font-bold text-cn-text">
+                <a
+                  href={APP_HOME_PATH}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo(APP_HOME_PATH);
+                  }}
+                  className="cn-shell-link rounded hover:text-cn-link"
+                >
+                  Mask &amp; Unmask
+                </a>
+              </h1>
             </div>
             <p className="mt-0.5 text-xs text-cn-text-muted">機密情報の仮名化・復元ツール</p>
           </div>
