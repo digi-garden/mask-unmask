@@ -260,7 +260,7 @@ export function MaskTab({
             onSelect={handleTextSelect}
             onScroll={handleScroll}
             placeholder="個人情報を含むテキストを入力してください（ドラッグ選択でカスタム登録可能）..."
-            className="w-full h-[calc(100%-2rem)] bg-brand-input border border-brand-border/40 hover:border-brand-border rounded-lg p-4 text-slate-100 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:border-brand-primary transition duration-200 resize-none"
+            className="w-full h-[calc(100%-2rem)] bg-brand-input border border-brand-border/40 hover:border-brand-border rounded-lg p-4 text-slate-100 text-sm leading-relaxed focus:outline-none focus:ring-[3px] focus:ring-brand-primary/40 focus:border-brand-primary transition duration-200 resize-none"
           />
         </div>
 
@@ -279,7 +279,7 @@ export function MaskTab({
               <button
                 disabled={!maskedOutput}
                 onClick={handleCopyToClipboard}
-                className="px-3 py-1.5 text-xs bg-brand-primary disabled:bg-brand-primary/30 disabled:text-white/70 hover:bg-brand-primaryHover text-emerald-950 rounded-lg font-extrabold tracking-wide shadow-md shadow-brand-primary/10 hover:shadow-brand-primary/20 disabled:shadow-none transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 flex items-center gap-1.5"
+                className="px-3 py-1.5 text-xs bg-brand-primary disabled:bg-brand-primary/30 disabled:text-white/70 hover:bg-brand-primaryHover text-cn-on-accent rounded-lg font-extrabold tracking-wide shadow-md shadow-brand-primary/10 hover:shadow-brand-primary/20 disabled:shadow-none transition-all duration-200 focus:outline-none focus:ring-[3px] focus:ring-brand-primary/50 flex items-center gap-1.5"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
@@ -326,7 +326,7 @@ export function MaskTab({
                 }`}
               >
                 <div
-                  className={`w-3.5 h-3.5 rounded-full bg-white transition-transform duration-200 ${
+                  className={`w-3.5 h-3.5 rounded-full bg-cn-text transition-transform duration-200 ${
                     toggles[key] ? 'translate-x-3.5' : 'translate-x-0'
                   }`}
                 />
@@ -354,7 +354,7 @@ export function MaskTab({
                 value={customOriginal}
                 onChange={(e) => setCustomOriginal(e.target.value)}
                 placeholder="選択したテキストが入ります"
-                className="w-full bg-brand-input border border-brand-border/40 hover:border-brand-border rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/45 focus:border-brand-primary transition"
+                className="w-full bg-brand-input border border-brand-border/40 hover:border-brand-border rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-[3px] focus:ring-brand-primary/45 focus:border-brand-primary transition"
               />
             </div>
 
@@ -366,7 +366,7 @@ export function MaskTab({
                 id="custom-category"
                 value={customCategory}
                 onChange={(e) => setCustomCategory(e.target.value as MappingItem['category'])}
-                className="w-full bg-brand-input border border-brand-border/40 hover:border-brand-border rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/45 focus:border-brand-primary transition"
+                className="w-full bg-brand-input border border-brand-border/40 hover:border-brand-border rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-[3px] focus:ring-brand-primary/45 focus:border-brand-primary transition"
               >
                 <option value="CUSTOM">CUSTOM (その他一般テキスト)</option>
                 <option value="APIKEY">APIKEY (認証トークン)</option>
@@ -379,7 +379,7 @@ export function MaskTab({
 
             <button
               type="submit"
-              className="w-full mt-2 py-2 bg-brand-surface hover:bg-brand-card border border-brand-primary/40 hover:border-brand-primary text-brand-primary rounded-lg text-sm font-semibold transition duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
+              className="w-full mt-2 py-2 bg-brand-surface hover:bg-brand-card border border-brand-primary/40 hover:border-brand-primary text-brand-primary rounded-lg text-sm font-semibold transition duration-200 focus:outline-none focus:ring-[3px] focus:ring-brand-primary/40"
             >
               登録を追加
             </button>
@@ -416,7 +416,7 @@ export function MaskTab({
                       {/* 48px タッチ領域の削除ボタン */}
                       <button
                         onClick={() => handleDeleteMapping(item)}
-                        className="text-brand-danger hover:text-red-400 w-12 h-12 flex items-center justify-center rounded hover:bg-brand-danger/10 transition shrink-0 text-base"
+                        className="text-brand-danger hover:text-cn-error w-12 h-12 flex items-center justify-center rounded hover:bg-brand-danger/10 transition shrink-0 text-base"
                         aria-label={`${item.tag} マッピングを削除`}
                       >
                         ✕
@@ -460,7 +460,7 @@ export function MaskTab({
                         <td className="p-0 text-center">
                           <button
                             onClick={() => handleDeleteMapping(item)}
-                            className="text-brand-danger hover:text-red-400 w-12 h-12 flex items-center justify-center rounded hover:bg-brand-danger/10 transition mx-auto text-base"
+                            className="text-brand-danger hover:text-cn-error w-12 h-12 flex items-center justify-center rounded hover:bg-brand-danger/10 transition mx-auto text-base"
                             aria-label={`${item.tag} マッピングを削除`}
                           >
                             ✕
@@ -479,10 +479,10 @@ export function MaskTab({
                         <td className="p-2">
                           <span className={`px-2 py-0.5 rounded text-[10px] ${
                             item.source === 'AUTO'
-                              ? 'bg-blue-900/40 text-blue-300'
+                              ? 'bg-cn-surface text-cn-accent'
                               : item.source === 'CUSTOM'
                               ? 'bg-purple-900/40 text-purple-300'
-                              : 'bg-emerald-900/40 text-emerald-300'
+                              : 'bg-cn-surface text-cn-success'
                           }`}>
                             {item.source}
                           </span>
