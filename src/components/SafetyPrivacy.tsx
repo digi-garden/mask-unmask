@@ -11,7 +11,7 @@ export function SafetyPrivacy({ onNavigate }: SafetyPrivacyProps) {
       <div className="flex items-center gap-2 text-sm text-slate-400">
         <button
           onClick={() => onNavigate(APP_HOME_PATH)}
-          className="hover:text-brand-primary hover:underline transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+          className="hover:text-brand-primary hover:underline transition focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-primary"
         >
           ホーム
         </button>
@@ -184,7 +184,7 @@ export function SafetyPrivacy({ onNavigate }: SafetyPrivacyProps) {
         <div className="pt-6 border-t border-brand-border/20 flex justify-center">
           <button
             onClick={() => onNavigate(APP_HOME_PATH)}
-            className="px-8 py-3 bg-brand-primary hover:bg-brand-primaryHover text-emerald-950 font-extrabold rounded-lg tracking-wide shadow-md shadow-brand-primary/10 hover:shadow-brand-primary/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/50"
+            className="px-8 py-3 bg-brand-primary hover:bg-brand-primaryHover text-cn-on-accent font-extrabold rounded-lg tracking-wide shadow-md shadow-brand-primary/10 hover:shadow-brand-primary/20 transition-all duration-200 focus:outline-none focus:ring-[3px] focus:ring-brand-primary/50"
           >
             ツールに戻る
           </button>
