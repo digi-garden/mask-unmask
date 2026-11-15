@@ -122,7 +122,7 @@ export function CommonActions({
       <div className="hidden md:flex gap-3 flex-1">
         <button
           onClick={handleExport}
-          className="flex-1 px-4 py-3 bg-brand-surface border border-brand-border/40 hover:border-brand-primary/50 text-slate-200 hover:text-white rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 flex items-center justify-center gap-2"
+          className="flex-1 px-4 py-3 bg-brand-surface border border-brand-border/40 hover:border-brand-primary/50 text-slate-200 hover:text-white rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-[3px] focus:ring-brand-primary/40 flex items-center justify-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -151,7 +151,7 @@ export function CommonActions({
       {/* 共通リセットボタン (PC/モバイル共用) */}
       <button
         onClick={() => clearDialogRef.current?.showModal()}
-        className="w-full md:w-auto md:px-8 py-3 bg-brand-danger/10 border border-brand-danger/40 hover:bg-brand-danger/20 text-red-300 hover:text-red-200 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-danger/40 flex items-center justify-center gap-2"
+        className="w-full md:w-auto md:px-8 py-3 bg-brand-danger/10 border border-brand-danger/40 hover:bg-brand-danger/20 text-cn-error hover:text-cn-error rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-[3px] focus:ring-brand-danger/40 flex items-center justify-center gap-2"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -184,7 +184,7 @@ export function CommonActions({
               onClearAll();
               closeClearDialog();
             }}
-            className="px-5 py-2 bg-brand-danger hover:bg-red-600 text-white rounded-md text-sm font-semibold transition"
+            className="px-5 py-2 bg-brand-danger hover:brightness-110 text-cn-on-accent rounded-md text-sm font-semibold transition"
           >
             クリア実行
           </button>
@@ -254,7 +254,7 @@ export function CommonActions({
           </button>
           <button
             onClick={confirmImport}
-            className="px-5 py-2 bg-brand-primary hover:bg-brand-primaryHover text-emerald-950 rounded-md text-sm font-extrabold tracking-wide transition"
+            className="px-5 py-2 bg-brand-primary hover:bg-brand-primaryHover text-cn-on-accent rounded-md text-sm font-extrabold tracking-wide transition"
           >
             インポート確定
           </button>
@@ -283,7 +283,7 @@ export function CommonActions({
           </button>
           <button
             onClick={confirmExport}
-            className="px-5 py-2 bg-brand-primary hover:bg-brand-primaryHover text-emerald-950 rounded-md text-sm font-extrabold tracking-wide transition"
+            className="px-5 py-2 bg-brand-primary hover:bg-brand-primaryHover text-cn-on-accent rounded-md text-sm font-extrabold tracking-wide transition"
           >
             同意してエクスポート
           </button>
