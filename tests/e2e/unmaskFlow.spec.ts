@@ -12,13 +12,9 @@ test.describe('Mask & Unmask E2E Flow', () => {
     const headerDesc = page.locator('header p >> text=機密情報の仮名化・復元ツール');
     await expect(headerDesc).toBeVisible();
 
-    await expect(page.locator('footer > p').first())
-      .toHaveText('© 2026 digi-garden');
-
-    // 旧製品名 CircleNote が画面テキスト(ドメイン除く)に漏れ出ていないことを検証
-    const bodyText = await page.textContent('body');
-    const hasOldProductName = /CircleNote(?!\.com)/i.test(bodyText || '');
-    expect(hasOldProductName).toBe(false);
+    await expect(page.getByRole('contentinfo')).toContainText('© 2026 digi-garden');
+    await expect(page.getByRole('banner').getByRole('link', { name: 'CircleNote' }))
+      .toHaveAttribute('href', '/');
 
     // 1. 仮名化入力テキストエリアへ文字を入力
     const maskInput = page.locator('#mask-input');
@@ -176,11 +172,11 @@ test.describe('Mask & Unmask E2E Flow', () => {
     await labelNoticeLink.click();
     await expect(page).toHaveURL(/\/mask-unmask\/safety-and-privacy$/);
 
-    // 5. ヘッダーロゴをクリックしてアプリに戻る
-    const headerLogo = page.locator('header a >> text=Mask & Unmask');
-    await expect(headerLogo).toBeVisible();
-    await headerLogo.click();
-    await expect(page).toHaveURL(/\/mask-unmask\/$/);
+    // 5. ツール名リンクからアプリに戻る（CircleNoteはポータルへのリンク）
+    const toolHomeLink = page.getByRole('banner').getByRole('link', { name: 'Mask & Unmask' });
+    await expect(toolHomeLink).toBeVisible();
+    await toolHomeLink.click();
+    await expect(page).toHaveURL(/\\/mask-unmask\\/$/);
 
     // 6. 直接アクセスの確認
     await page.goto('/mask-unmask/safety-and-privacy');
