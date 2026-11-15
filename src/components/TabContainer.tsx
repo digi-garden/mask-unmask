@@ -42,7 +42,7 @@ export function TabContainer({ activeTab, onChangeTab }: TabContainerProps) {
           tabIndex={activeTab === 'mask' ? 0 : -1}
           onClick={() => onChangeTab('mask')}
           onKeyDown={(e) => handleKeyDown(e, 'mask')}
-          className={`px-6 py-3.5 text-sm font-semibold rounded-t-lg transition-all duration-200 border-b-2 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 ${
+          className={`px-6 py-3.5 text-sm font-semibold rounded-t-lg transition-all duration-200 border-b-2 focus:outline-none focus:ring-[3px] focus:ring-brand-primary/50 ${
             activeTab === 'mask'
               ? 'border-brand-primary text-brand-primary bg-brand-surface/40'
               : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-brand-surface/10'
@@ -59,7 +59,7 @@ export function TabContainer({ activeTab, onChangeTab }: TabContainerProps) {
           tabIndex={activeTab === 'unmask' ? 0 : -1}
           onClick={() => onChangeTab('unmask')}
           onKeyDown={(e) => handleKeyDown(e, 'unmask')}
-          className={`px-6 py-3.5 text-sm font-semibold rounded-t-lg transition-all duration-200 border-b-2 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 ${
+          className={`px-6 py-3.5 text-sm font-semibold rounded-t-lg transition-all duration-200 border-b-2 focus:outline-none focus:ring-[3px] focus:ring-brand-primary/50 ${
             activeTab === 'unmask'
               ? 'border-brand-primary text-brand-primary bg-brand-surface/40'
               : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-brand-surface/10'
