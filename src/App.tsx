@@ -186,8 +186,8 @@ export default function App() {
   return (
     <div className="cn-page min-h-screen text-cn-text flex flex-col">
       {/* CircleNote 共通ヘッダー */}
-      <header className="sticky top-0 z-10 border-b border-cn-border bg-cn-bg px-4 py-4 shadow-lg md:px-8">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-5 gap-y-3">
+      <header className="sticky top-0 z-10 border-b border-cn-border bg-cn-bg py-4 shadow-lg">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-3 px-4 sm:px-6">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <a href="/" className="cn-shell-link rounded text-base font-semibold text-cn-text hover:text-cn-link">
@@ -216,11 +216,33 @@ export default function App() {
       </header>
 
       {/* メインコンテンツ */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col gap-6">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
         {currentPath === PRIVACY_PATH ? (
           <SafetyPrivacy onNavigate={navigateTo} />
         ) : (
           <>
+            <div
+              role="region"
+              aria-label="プライバシーと利用案内"
+              className="rounded-lg border border-cn-accent-border bg-cn-surface px-4 py-3 text-sm text-cn-success"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2">
+                <div className="flex items-start gap-2">
+                  <span aria-hidden="true" className="font-bold">✓</span>
+                  <span>仮名化・復元処理はブラウザ内で行われ、入力内容を外部へ送信するアプリケーション処理はありません。</span>
+                </div>
+                <a
+                  href={PRIVACY_PATH}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo(PRIVACY_PATH);
+                  }}
+                  className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover"
+                >
+                  安全性とプライバシーについて詳しく見る
+                </a>
+              </div>
+            </div>
             {/* タブコンテナ */}
             <TabContainer
               activeTab={state.activeTab}
@@ -249,7 +271,6 @@ export default function App() {
                   excludeList={excludeList}
                   onUpdateExcludeList={setExcludeList}
                   showToast={showToast}
-                  onNavigate={navigateTo}
                 />
               </div>
 
@@ -286,7 +307,7 @@ export default function App() {
             {/* 用途説明・最短手順・注意事項・FAQ (SEO-05) */}
             <section
               aria-labelledby="usage-guide-heading"
-              className="mt-4 bg-brand-surface/15 border border-brand-border/20 rounded-2xl p-5 md:p-6 text-slate-300 space-y-5"
+              className="mt-4 bg-cn-surface border border-cn-border rounded-2xl p-5 md:p-6 text-slate-300 space-y-5"
             >
               <h2 id="usage-guide-heading" className="text-base font-bold text-white tracking-tight">
                 Mask &amp; Unmask の用途・使い方・よくある質問
@@ -348,8 +369,8 @@ export default function App() {
       </main>
 
       {/* CircleNote 共通フッター：既存リンクとSPA内プライバシー遷移を維持 */}
-      <footer className="border-t border-cn-border bg-cn-bg px-4 py-6 text-center text-sm text-cn-text-muted">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-3">
+      <footer className="border-t border-cn-border bg-cn-bg py-6 text-center text-sm text-cn-text-muted">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 sm:px-6">
           <nav aria-label="CircleNoteの他のツール" className="flex flex-wrap justify-center gap-x-5 gap-y-2">
             <a href="/context-packer/" className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover">Context-Packer</a>
             <a href="/vram-calculator/" className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover">VRAM Calculator</a>
