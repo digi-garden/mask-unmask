@@ -167,7 +167,7 @@ test.describe('Mask & Unmask E2E Flow', () => {
     await expect(page.locator('#tab-mask')).toBeVisible();
 
     // 4. アプリから案内リンクでの遷移
-    const labelNoticeLink = page.locator('#panel-mask a:has-text("安全性とプライバシーについて詳しく見る")');
+    const labelNoticeLink = page.getByRole('main').getByRole('link', { name: '安全性とプライバシーについて詳しく見る' });
     await expect(labelNoticeLink).toBeVisible();
     await labelNoticeLink.click();
     await expect(page).toHaveURL(/\/mask-unmask\/safety-and-privacy$/);
