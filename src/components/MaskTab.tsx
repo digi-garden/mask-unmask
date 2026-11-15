@@ -24,8 +24,7 @@ export function MaskTab({
   onChangeToggles,
   excludeList,
   onUpdateExcludeList,
-  showToast,
-  onNavigate
+  showToast
 }: MaskTabProps) {
   const [isPending, startTransition] = useTransition();
   const inputRef = useRef<HTMLTextAreaElement>(null);
