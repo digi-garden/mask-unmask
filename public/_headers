@@ -3,3 +3,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
   Cache-Control: public, max-age=0, must-revalidate, no-transform
+
+/mask-unmask/third-party-licenses/*
+  Content-Type: text/plain; charset=utf-8
+  Content-Disposition: inline
