@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 
 test('OSS notices are linked from the app and served beneath its deployment path', async ({ page, request }) => {
@@ -6,6 +7,12 @@ test('OSS notices are linked from the app and served beneath its deployment path
   await expect(link).toBeVisible();
   await expect(link).toHaveAttribute('href', '/mask-unmask/third-party-licenses/README.md');
 
+  // Vite preview does not apply Cloudflare Pages _headers; assert published rules explicitly.
+  const headers = await readFile('public/_headers', 'utf8');
+  expect(headers).toContain('/mask-unmask/third-party-licenses/*');
+  expect(headers).toContain('Content-Type: text/plain; charset=utf-8');
+  expect(headers).toContain('Content-Disposition: inline');
+
   const manifestResponse = await request.get('/mask-unmask/third-party-licenses/README.md');
   expect(manifestResponse.ok()).toBeTruthy();
   const manifest = await manifestResponse.text();
@@ -13,6 +20,13 @@ test('OSS notices are linked from the app and served beneath its deployment path
   for (const pkg of ['react', 'react-dom', 'scheduler', 'js-tokens', 'loose-envify']) {
     const section = manifest.split('\n').find((line) => line.startsWith(`## ${pkg}@`));
     expect(section, `Missing manifest entry for ${pkg}`).toBeDefined();
+  }
+
+  expect(manifest).toContain('## Build-time CSS-origin code (included in generated CSS)');
+  expect(manifest).toContain('### tailwindcss@3.4.19 (lockfile: MIT; build-time CSS)');
+  expect(manifest).toContain('- tailwindcss-3.4.19-LICENSE');
+  for (const devOnly of ['vite@', 'typescript@', 'vitest@']) {
+    expect(manifest).not.toContain(`## ${devOnly}`);
   }
 
   expect(manifest).toContain('Embedded Manrope font');
