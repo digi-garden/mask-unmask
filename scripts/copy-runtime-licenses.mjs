@@ -23,6 +23,7 @@ await mkdir(dest, { recursive: true });
 const manifest = [
   '# Runtime dependency license and notice files',
   '',
+  'Runtime npm dependencies are listed first; build-time CSS-origin code is listed separately below.',
   'Verbatim files copied from the installed npm packages for this build.',
   'Package metadata and a copied file alone do not prove complete OSS compliance.',
   '',
@@ -66,5 +67,27 @@ manifest.push('Source: https://github.com/google/fonts/blob/main/ofl/manrope/OFL
 manifest.push('Notice file: ' + manropeNotice);
 manifest.push('');
 
+
+ // Tailwind's preflight CSS is present in the generated stylesheet even though
+ // tailwindcss is classified as a development dependency in the lockfile.
+ // Copy its original notice separately; do not reclassify all dev dependencies.
+ const tailwind = lock.packages?.['node_modules/tailwindcss'];
+ if (!tailwind || typeof tailwind.version !== 'string' || !/^[0-9A-Za-z.+_-]+$/.test(tailwind.version)) {
+   throw new Error('Missing or invalid tailwindcss lockfile version');
+ }
+ const tailwindFiles = (await readdir(join(root, 'node_modules', 'tailwindcss'), { withFileTypes: true }))
+   .filter((entry) => entry.isFile() && /^(?:licen[cs]e|copying|notice)(?:[.\\-_].*)?$/i.test(entry.name))
+   .map((entry) => entry.name).sort();
+ if (tailwindFiles.length === 0) throw new Error('Missing original tailwindcss license notice');
+ manifest.push('## Build-time CSS-origin code (included in generated CSS)');
+ manifest.push('');
+ manifest.push(`### tailwindcss@${tailwind.version} (lockfile: ${tailwind.license ?? 'UNKNOWN'}; build-time CSS)`);
+ for (const name of tailwindFiles) {
+   const target = `tailwindcss-${tailwind.version}-${name}`;
+   await copyFile(join(root, 'node_modules', 'tailwindcss', name), join(dest, target));
+   manifest.push(`- ${target}`);
+ }
+ manifest.push('');
+ 
 await writeFile(join(dest, 'README.md'), manifest.join('\n'), 'utf8');
 console.log(`Copied original notice files for ${packages.length} runtime-classified packages into dist/mask-unmask/third-party-licenses/`);
