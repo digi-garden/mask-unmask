@@ -55,7 +55,7 @@ for (const width of [375, 1280]) {
     const selectors = [
       '#panel-mask >> text=現在、仮名化されたデータはありません',
       'button:has-text("共通クリア (リセット)")',
-      'footer > p:first-child',
+      'footer a[href="https://digi-garden.com/"]',
     ];
     for (const selector of selectors) {
       const locator = page.locator(selector);

@@ -184,39 +184,65 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-slate-100 flex flex-col">
-      {/* ヘッダー領域 */}
-      <header className="border-b border-brand-border/30 bg-brand-surface/60 backdrop-blur-md sticky top-0 z-10 px-4 py-4 md:px-8 flex justify-between items-center shadow-lg">
-        <a
-          href={APP_HOME_PATH}
-          onClick={(e) => {
-            e.preventDefault();
-            navigateTo(APP_HOME_PATH);
-          }}
-          className="flex items-center gap-3 hover:opacity-80 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-lg p-0.5"
-        >
-          <svg className="w-8 h-8 text-brand-primary animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-          </svg>
-          <div>
-            <h1 className="text-lg font-extrabold text-white tracking-tight">Mask & Unmask</h1>
-            <p className="text-[10px] text-slate-400">機密情報の仮名化・復元ツール</p>
+    <div className="cn-page min-h-screen text-cn-text flex flex-col">
+      {/* CircleNote 共通ヘッダー */}
+      <header className="sticky top-0 z-10 border-b border-cn-border bg-cn-bg py-4 shadow-lg">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-3 px-4 sm:px-6">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <a href="/" className="cn-shell-link rounded text-base font-semibold text-cn-text hover:text-cn-link">
+                CircleNote
+              </a>
+              <span className="text-cn-border-strong" aria-hidden="true">/</span>
+              <h1 className="text-base font-bold text-cn-text">
+                <a
+                  href={APP_HOME_PATH}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo(APP_HOME_PATH);
+                  }}
+                  className="cn-shell-link rounded hover:text-cn-link"
+                >
+                  Mask &amp; Unmask
+                </a>
+              </h1>
+            </div>
+            <p className="mt-0.5 text-xs text-cn-text-muted">機密情報の仮名化・復元ツール</p>
           </div>
-        </a>
-
-        {/* セキュリティバッジ (文言の確定準拠 - 軽微指摘) */}
-        <div className="flex items-center gap-2 bg-brand-primary/10 border border-brand-primary/30 px-3 py-1.5 rounded-full text-xs font-semibold text-brand-primary">
-          <span className="w-2 h-2 rounded-full bg-brand-primary animate-ping" />
-          入力データを送信しない / ブラウザ内完結
+          <span className="inline-flex max-w-full items-center rounded-full border border-cn-accent-border px-3 py-1.5 text-xs font-semibold text-cn-accent">
+            通信なし・ブラウザ内で完結
+          </span>
         </div>
       </header>
 
       {/* メインコンテンツ */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col gap-6">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
         {currentPath === PRIVACY_PATH ? (
           <SafetyPrivacy onNavigate={navigateTo} />
         ) : (
           <>
+            <div
+              role="region"
+              aria-label="プライバシーと利用案内"
+              className="rounded-lg border border-cn-accent-border bg-cn-surface px-4 py-3 text-sm text-cn-success"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2">
+                <div className="flex items-start gap-2">
+                  <span aria-hidden="true" className="font-bold">✓</span>
+                  <span>仮名化・復元処理はブラウザ内で行われ、入力内容を外部へ送信するアプリケーション処理はありません。</span>
+                </div>
+                <a
+                  href={PRIVACY_PATH}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo(PRIVACY_PATH);
+                  }}
+                  className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover"
+                >
+                  安全性とプライバシーについて詳しく見る
+                </a>
+              </div>
+            </div>
             {/* タブコンテナ */}
             <TabContainer
               activeTab={state.activeTab}
@@ -245,7 +271,6 @@ export default function App() {
                   excludeList={excludeList}
                   onUpdateExcludeList={setExcludeList}
                   showToast={showToast}
-                  onNavigate={navigateTo}
                 />
               </div>
 
@@ -282,22 +307,22 @@ export default function App() {
             {/* 用途説明・最短手順・注意事項・FAQ (SEO-05) */}
             <section
               aria-labelledby="usage-guide-heading"
-              className="mt-4 bg-brand-surface/15 border border-brand-border/20 rounded-2xl p-5 md:p-6 text-slate-300 space-y-5"
+              className="mt-4 bg-cn-surface border border-cn-border rounded-2xl p-5 md:p-6 text-slate-300 space-y-5"
             >
-              <h2 id="usage-guide-heading" className="text-base font-bold text-white tracking-tight">
+              <h2 id="usage-guide-heading" className="text-lg font-bold text-white tracking-tight">
                 Mask &amp; Unmask の用途・使い方・よくある質問
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm leading-relaxed">
                 <div className="bg-brand-surface/30 border border-brand-border/20 rounded-xl p-4 space-y-2">
-                  <h3 className="text-sm font-bold text-brand-primary">主な用途・使用例</h3>
+                  <h3 className="text-base font-bold text-brand-primary">主な用途・使用例</h3>
                   <p>
                     生成AIへのプロンプト入力や障害ログ・問い合わせ文の共有前に、文章内のメールアドレス（EMAIL）・電話番号（PHONE）・IPアドレス（IPV4/IPV6）・認証トークン（APIKEY）や任意の固有名詞（CUSTOM）を一意の仮名化タグ（例: [CN_EMAIL_xxxx] 形式）へ置換し、AIの回答などを元の文字列へ復元できます。
                   </p>
                 </div>
 
                 <div className="bg-brand-surface/30 border border-brand-border/20 rounded-xl p-4 space-y-2">
-                  <h3 className="text-sm font-bold text-brand-primary">最短の利用手順</h3>
+                  <h3 className="text-base font-bold text-brand-primary">最短の利用手順</h3>
                   <ol className="list-decimal list-inside space-y-1">
                     <li>「仮名化 (Mask)」に文章を入力し、自動検出または手動追加（PC画面のドラッグ選択・直接入力）で置換内容と出力を確認してコピーします。</li>
                     <li>同じタブ内では「元データ復元 (Unmask)」にタグ付き文章を貼り付けるだけで元の文字列へ復元できます。</li>
@@ -306,7 +331,7 @@ export default function App() {
                 </div>
 
                 <div className="bg-brand-surface/30 border border-brand-border/20 rounded-xl p-4 space-y-2">
-                  <h3 className="text-sm font-bold text-brand-primary">利用上の注意点</h3>
+                  <h3 className="text-base font-bold text-brand-primary">利用上の注意点</h3>
                   <ul className="list-disc list-inside space-y-1">
                     <li>本ツールは置換マップで復元可能な「仮名化」を行うものであり、完全な匿名化ではありません。</li>
                     <li>自動検出は正規表現パターンに基づくため、すべての機密情報の検出を保証しません。共有前に必ず出力結果を目視確認してください。</li>
@@ -316,8 +341,8 @@ export default function App() {
               </div>
 
               <div className="border-t border-brand-border/20 pt-4 space-y-3">
-                <h3 className="text-sm font-bold text-slate-200">よくある質問（FAQ）</h3>
-                <dl className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
+                <h3 className="text-base font-bold text-slate-200">よくある質問（FAQ）</h3>
+                <dl className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm leading-relaxed">
                   <div className="space-y-1">
                     <dt className="font-semibold text-slate-100">Q. 入力したテキストや置換マップはサーバーへ送信されますか？</dt>
                     <dd className="text-slate-400">
@@ -343,63 +368,42 @@ export default function App() {
         )}
       </main>
 
-      {/* フッター */}
-      <footer className="border-t border-brand-border/20 py-4 text-center text-slate-400 text-xs">
-        <p>&copy; 2026 digi-garden</p>
-        <p className="mt-1.5 flex flex-wrap justify-center items-center gap-3">
-          <span className="flex items-center gap-2">
-            <span>提供：</span>
+      {/* CircleNote 共通フッター：既存リンクとSPA内プライバシー遷移を維持 */}
+      <footer className="border-t border-cn-border bg-cn-bg py-6 text-center text-sm text-cn-text-muted">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 sm:px-6">
+          <nav aria-label="CircleNoteの他のツール" className="flex flex-wrap justify-center gap-x-5 gap-y-2">
+            <a href="/context-packer/" className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover">Context-Packer</a>
+            <a href="/vram-calculator/" className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover">VRAM Calculator</a>
+          </nav>
+          <nav aria-label="利用規約・プライバシー等" className="flex flex-wrap justify-center gap-x-5 gap-y-2">
             <a
-              href="https://digi-garden.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="digi-garden（デジガーデン）のWebサイトを開く"
-              className="inline-flex shrink-0 items-center rounded-md bg-identity-background px-2 py-1.5 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
+              href={PRIVACY_PATH}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo(PRIVACY_PATH);
+              }}
+              className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover"
             >
-              <img
-                src={`${APP_PUBLIC_ASSET_BASE}digi-garden-logo.svg`}
-                alt="digi-garden（デジガーデン）"
-                className="h-5 w-auto"
-              />
+              安全性とプライバシー
             </a>
-          </span>
-          <span className="text-slate-700">|</span>
-          <a
-            href={PRIVACY_PATH}
-            onClick={(e) => {
-              e.preventDefault();
-              navigateTo(PRIVACY_PATH);
-            }}
-            className="text-slate-400 underline decoration-slate-600 underline-offset-2 transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
-          >
-            安全性とプライバシー
-          </a>
-          <span className="text-slate-700">|</span>
-          <a
-            href={`${APP_PUBLIC_ASSET_BASE}third-party-licenses/README.md`}
-            className="text-slate-400 underline decoration-slate-600 underline-offset-2 transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
-          >
-            OSSライセンス
-          </a>
-          <span className="text-slate-700">|</span>
-          <a
-            href="https://digi-garden.com/terms/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-slate-400 underline decoration-slate-600 underline-offset-2 transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
-          >
-            利用規約
-          </a>
-          <span className="text-slate-700">|</span>
-          <a
-            href="https://digi-garden.com/privacy/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-slate-400 underline decoration-slate-600 underline-offset-2 transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
-          >
-            プライバシーポリシー
-          </a>
-        </p>
+            <a
+              href={`${APP_PUBLIC_ASSET_BASE}third-party-licenses/README.md`}
+              className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover"
+            >
+              OSSライセンス
+            </a>
+            <a href="https://digi-garden.com/terms/" target="_blank" rel="noopener noreferrer" className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover">
+              利用規約
+            </a>
+            <a href="https://digi-garden.com/privacy/" target="_blank" rel="noopener noreferrer" className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover">
+              プライバシーポリシー
+            </a>
+          </nav>
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            <span>by <a href="https://digi-garden.com/" className="cn-shell-link rounded text-cn-link underline underline-offset-2 hover:text-cn-accent-hover">digi-garden</a></span>
+            <span>&copy; 2026 digi-garden</span>
+          </div>
+        </div>
       </footer>
 
       {/* トースト通知 (要求事項) */}
