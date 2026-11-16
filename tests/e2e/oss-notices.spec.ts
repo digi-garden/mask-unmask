@@ -15,6 +15,13 @@ test('OSS notices are linked from the app and served beneath its deployment path
     expect(section, `Missing manifest entry for ${pkg}`).toBeDefined();
   }
 
+  expect(manifest).toContain('## Build-time CSS-origin code (included in generated CSS)');
+  expect(manifest).toContain('### tailwindcss@3.4.19 (lockfile: MIT; build-time CSS)');
+  expect(manifest).toContain('- tailwindcss-3.4.19-LICENSE');
+  for (const devOnly of ['vite@', 'typescript@', 'vitest@']) {
+    expect(manifest).not.toContain(`## ${devOnly}`);
+  }
+
   expect(manifest).toContain('Embedded Manrope font');
   expect(manifest).toContain('Notice file: Manrope-OFL.txt');
   const fontResponse = await request.get('/mask-unmask/third-party-licenses/Manrope-OFL.txt');
