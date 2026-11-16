@@ -172,7 +172,33 @@ for (const file of files) {
   }
 }
 
-const expectedNoticeFiles = new Set([...copiedNoticeEvidence.map((item) => item.distributed), 'mask-unmask/third-party-licenses/Manrope-OFL.txt']);
+// Tailwind is a dev dependency whose preflight CSS is included in the build.
+// Verify its original license separately from runtime npm license evidence.
+const tailwindMetadata = lock.packages?.['node_modules/tailwindcss'];
+if (!tailwindMetadata?.version) missing.push('tailwindcss lockfile entry missing');
+const tailwindLicenseFiles = (await readdir(join(root, 'node_modules/tailwindcss'), { withFileTypes: true }))
+  .filter((entry) => entry.isFile() && /^(?:licen[cs]e|copying|notice)(?:[.\\-_].*)?$/i.test(entry.name))
+  .map((entry) => entry.name);
+if (tailwindLicenseFiles.length === 0) missing.push('tailwindcss original license missing');
+if (!publishedManifest.includes('## Build-time CSS-origin code (included in generated CSS)')) {
+  missing.push('Tailwind CSS-origin section missing from notice manifest');
+}
+if (tailwindMetadata?.version && !publishedManifest.includes(`### tailwindcss@${tailwindMetadata.version} (lockfile: ${tailwindMetadata.license ?? 'UNKNOWN'}; build-time CSS)`)) {
+  missing.push('Tailwind CSS-origin version/license entry missing from notice manifest');
+}
+const tailwindExpected = [];
+for (const fileName of tailwindLicenseFiles) {
+  const outputName = `tailwindcss-${tailwindMetadata.version}-${fileName}`;
+  const distributedPath = `mask-unmask/third-party-licenses/${outputName}`;
+  tailwindExpected.push(distributedPath);
+  if (!publishedManifest.split('\n').includes(`- ${outputName}`)) missing.push(`Missing Tailwind file entry: ${outputName}`);
+  let originalHash = null;
+  let outputHash = null;
+  try { originalHash = await digest(join(root, 'node_modules/tailwindcss', fileName)); } catch { missing.push(`Cannot read original Tailwind notice: ${fileName}`); }
+  try { outputHash = await digest(join(noticeRoot, outputName)); } catch { missing.push(`Missing distributed Tailwind notice: ${outputName}`); }
+  if (!originalHash || !outputHash || originalHash !== outputHash) missing.push(`Tailwind license mismatch: ${outputName}`);
+}
+const expectedNoticeFiles = new Set([...copiedNoticeEvidence.map((item) => item.distributed), 'mask-unmask/third-party-licenses/Manrope-OFL.txt', ...tailwindExpected]);
 for (const file of files) {
   if (file.path.startsWith('mask-unmask/third-party-licenses/') &&
     file.path !== 'mask-unmask/third-party-licenses/README.md' &&
