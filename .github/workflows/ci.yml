@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - integration/mu-compliance-acceptance
+      - chore/update-dependencies-202611
 
 permissions:
   contents: read
