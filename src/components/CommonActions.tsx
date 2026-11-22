@@ -122,7 +122,7 @@ export function CommonActions({
       <div className="hidden md:flex gap-3 flex-1">
         <button
           onClick={handleExport}
-          className="flex-1 px-4 py-3 bg-brand-surface border border-brand-border/40 hover:border-brand-primary/50 text-slate-200 hover:text-white rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-[3px] focus:ring-brand-primary/40 flex items-center justify-center gap-2"
+          className="flex-1 px-4 py-3 bg-brand-surface border border-brand-border/40 hover:border-brand-primary/50 text-slate-200 hover:text-white rounded-lg font-medium transition-all duration-200 focus:outline-hidden focus:ring-[3px] focus:ring-brand-primary/40 flex items-center justify-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -151,7 +151,7 @@ export function CommonActions({
       {/* 共通リセットボタン (PC/モバイル共用) */}
       <button
         onClick={() => clearDialogRef.current?.showModal()}
-        className="w-full md:w-auto md:px-8 py-3 bg-brand-danger/10 border border-brand-danger/40 hover:bg-brand-danger/20 text-cn-error hover:text-cn-error rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-[3px] focus:ring-brand-danger/40 flex items-center justify-center gap-2"
+        className="w-full md:w-auto md:px-8 py-3 bg-brand-danger/10 border border-brand-danger/40 hover:bg-brand-danger/20 text-cn-error hover:text-cn-error rounded-lg font-medium transition-all duration-200 focus:outline-hidden focus:ring-[3px] focus:ring-brand-danger/40 flex items-center justify-center gap-2"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -164,7 +164,7 @@ export function CommonActions({
         ref={clearDialogRef}
         aria-labelledby="clear-dialog-title"
         aria-describedby="clear-dialog-desc"
-        className="bg-brand-surface border border-brand-border/60 rounded-xl p-6 text-slate-100 max-w-md w-full backdrop:bg-black/70 shadow-2xl focus:outline-none"
+        className="bg-brand-surface border border-brand-border/60 rounded-xl p-6 text-slate-100 max-w-md w-full backdrop:bg-black/70 shadow-2xl focus:outline-hidden"
       >
         <h3 id="clear-dialog-title" className="text-lg font-bold text-white mb-3">
           共通クリア (リセット) の確認
@@ -196,7 +196,7 @@ export function CommonActions({
         ref={importDialogRef}
         aria-labelledby="import-dialog-title"
         aria-describedby="import-dialog-desc"
-        className="bg-brand-surface border border-brand-border/60 rounded-xl p-6 text-slate-100 max-w-lg w-full backdrop:bg-black/70 shadow-2xl focus:outline-none"
+        className="bg-brand-surface border border-brand-border/60 rounded-xl p-6 text-slate-100 max-w-lg w-full backdrop:bg-black/70 shadow-2xl focus:outline-hidden"
       >
         <h3 id="import-dialog-title" className="text-lg font-bold text-white mb-3">
           マップインポートのプレビュー
@@ -266,7 +266,7 @@ export function CommonActions({
         ref={exportDialogRef}
         aria-labelledby="export-dialog-title"
         aria-describedby="export-dialog-desc"
-        className="bg-brand-surface border border-brand-border/60 rounded-xl p-6 text-slate-100 max-w-md w-full backdrop:bg-black/70 shadow-2xl focus:outline-none"
+        className="bg-brand-surface border border-brand-border/60 rounded-xl p-6 text-slate-100 max-w-md w-full backdrop:bg-black/70 shadow-2xl focus:outline-hidden"
       >
         <h3 id="export-dialog-title" className="text-lg font-bold text-white mb-3">
           マップエクスポートの確認

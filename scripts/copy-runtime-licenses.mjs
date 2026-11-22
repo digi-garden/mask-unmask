@@ -67,27 +67,32 @@ manifest.push('Source: https://github.com/google/fonts/blob/main/ofl/manrope/OFL
 manifest.push('Notice file: ' + manropeNotice);
 manifest.push('');
 
+// Preflight and the generated color-scheme fallback survive into the shipped CSS.
+manifest.push('## Build-time CSS-origin code (included in generated CSS)');
+manifest.push('');
+for (const packageName of ['tailwindcss', 'lightningcss']) {
+  const metadata = lock.packages?.[`node_modules/${packageName}`];
+  const version = metadata?.version;
+  if (typeof version !== 'string' || !/^[0-9A-Za-z.+_-]+$/.test(version)) {
+    throw new Error(`Missing or invalid ${packageName} lockfile version`);
+  }
+  const packageDir = join(root, 'node_modules', packageName);
+  const files = (await readdir(packageDir, { withFileTypes: true }))
+    .filter((entry) => entry.isFile() && /^(?:licen[cs]e|copying|notice)(?:[.\-_].*)?$/i.test(entry.name))
+    .map((entry) => entry.name)
+    .sort();
+  if (files.length === 0) throw new Error(`Missing original ${packageName} license notice`);
+  manifest.push(`### ${packageName}@${version} (lockfile: ${metadata.license ?? 'UNKNOWN'}; build-time CSS)`);
+  if (packageName === 'lightningcss') {
+    manifest.push(`Source for the generated color-scheme compatibility rules: https://github.com/parcel-bundler/lightningcss/tree/v${version}`);
+  }
+  for (const name of files) {
+    const target = `${packageName}-${version}-${name}`;
+    await copyFile(join(packageDir, name), join(dest, target));
+    manifest.push(`- ${target}`);
+  }
+  manifest.push('');
+}
 
- // Tailwind's preflight CSS is present in the generated stylesheet even though
- // tailwindcss is classified as a development dependency in the lockfile.
- // Copy its original notice separately; do not reclassify all dev dependencies.
- const tailwind = lock.packages?.['node_modules/tailwindcss'];
- if (!tailwind || typeof tailwind.version !== 'string' || !/^[0-9A-Za-z.+_-]+$/.test(tailwind.version)) {
-   throw new Error('Missing or invalid tailwindcss lockfile version');
- }
- const tailwindFiles = (await readdir(join(root, 'node_modules', 'tailwindcss'), { withFileTypes: true }))
-   .filter((entry) => entry.isFile() && /^(?:licen[cs]e|copying|notice)(?:[.\\-_].*)?$/i.test(entry.name))
-   .map((entry) => entry.name).sort();
- if (tailwindFiles.length === 0) throw new Error('Missing original tailwindcss license notice');
- manifest.push('## Build-time CSS-origin code (included in generated CSS)');
- manifest.push('');
- manifest.push(`### tailwindcss@${tailwind.version} (lockfile: ${tailwind.license ?? 'UNKNOWN'}; build-time CSS)`);
- for (const name of tailwindFiles) {
-   const target = `tailwindcss-${tailwind.version}-${name}`;
-   await copyFile(join(root, 'node_modules', 'tailwindcss', name), join(dest, target));
-   manifest.push(`- ${target}`);
- }
- manifest.push('');
- 
 await writeFile(join(dest, 'README.md'), manifest.join('\n'), 'utf8');
 console.log(`Copied original notice files for ${packages.length} runtime-classified packages into dist/mask-unmask/third-party-licenses/`);
