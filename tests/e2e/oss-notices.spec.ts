@@ -40,11 +40,19 @@ test('OSS notices are linked from the app and served beneath its deployment path
   expect(runtimeSections.map((section) => section.split('\n', 1)[0]).sort())
     .toEqual(expectedHeadings.sort());
 
-  const tailwindVersion = lock.packages['node_modules/tailwindcss']?.version;
-  expect(tailwindVersion, 'Missing tailwindcss lockfile version').toBeTruthy();
   expect(manifest).toContain('## Build-time CSS-origin code (included in generated CSS)');
-  expect(manifest.split('\n')).toContain(`### tailwindcss@${tailwindVersion} (lockfile: MIT; build-time CSS)`);
-  expect(manifest.split('\n')).toContain(`- tailwindcss-${tailwindVersion}-LICENSE`);
+  for (const [name, license] of [['tailwindcss', 'MIT'], ['lightningcss', 'MPL-2.0']]) {
+    const metadata = lock.packages[`${packagePrefix}${name}`];
+    expect(metadata?.version, `Missing ${name} lockfile version`).toBeTruthy();
+    expect(metadata.dev).toBe(true);
+    expect(manifest.split('\n')).toContain(`### ${name}@${metadata.version} (lockfile: ${license}; build-time CSS)`);
+    const filename = `${name}-${metadata.version}-LICENSE`;
+    expect(manifest.split('\n')).toContain(`- ${filename}`);
+    const response = await request.get(`/mask-unmask/third-party-licenses/${filename}`);
+    expect(response.ok(), filename).toBeTruthy();
+    expect(await response.body()).toEqual(await readFile(`node_modules/${name}/LICENSE`));
+  }
+  expect(manifest).not.toMatch(/^### @tailwindcss\/postcss@/m);
 
   expect(manifest).toContain('Embedded Manrope font');
   expect(manifest).toContain('Notice file: Manrope-OFL.txt');
