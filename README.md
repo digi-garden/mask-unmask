@@ -89,7 +89,7 @@ JavaScriptと`sessionStorage`が利用できる、現在サポートされてい
 
 ### 必要なもの
 
-* Node.js
+* Node.js 24.15.0以上の24系（CIと同じバージョンは `.nvmrc` を参照）
 * npm
 
 ### セットアップ
@@ -101,6 +101,7 @@ npm ci
 ```
 
 通常のGitHub SSH接続を使用する場合は、環境に合わせてclone URLを変更してください。
+すでにnvmを使用している場合は、`npm ci` の前にリポジトリ内で `nvm install` と `nvm use` を実行すると、CIと同じNode.jsを使用できます。
 
 ### 開発サーバー
 
