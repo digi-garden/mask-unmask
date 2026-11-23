@@ -172,33 +172,56 @@ for (const file of files) {
   }
 }
 
-// Tailwind is a dev dependency whose preflight CSS is included in the build.
-// Verify its original license separately from runtime npm license evidence.
-const tailwindMetadata = lock.packages?.['node_modules/tailwindcss'];
-if (!tailwindMetadata?.version) missing.push('tailwindcss lockfile entry missing');
-const tailwindLicenseFiles = (await readdir(join(root, 'node_modules/tailwindcss'), { withFileTypes: true }))
-  .filter((entry) => entry.isFile() && /^(?:licen[cs]e|copying|notice)(?:[.\\-_].*)?$/i.test(entry.name))
-  .map((entry) => entry.name);
-if (tailwindLicenseFiles.length === 0) missing.push('tailwindcss original license missing');
-if (!publishedManifest.includes('## Build-time CSS-origin code (included in generated CSS)')) {
-  missing.push('Tailwind CSS-origin section missing from notice manifest');
+// Verify code present in the shipped stylesheet as well as the original notices.
+const appStyles = await Promise.all(files
+  .filter(({ path }) => /^mask-unmask\/assets\/[^/]+\.css$/.test(path))
+  .map(({ path }) => readFile(join(distRoot, path), 'utf8')));
+const styles = appStyles.join('\n');
+const cssOrigins = [
+  { name: 'tailwindcss', license: 'MIT' },
+  { name: 'lightningcss', license: 'MPL-2.0' },
+];
+if (!publishedManifest.split('\n').includes('## Build-time CSS-origin code (included in generated CSS)')) {
+  missing.push('Build-time CSS-origin section missing from notice manifest');
 }
-if (tailwindMetadata?.version && !publishedManifest.includes(`### tailwindcss@${tailwindMetadata.version} (lockfile: ${tailwindMetadata.license ?? 'UNKNOWN'}; build-time CSS)`)) {
-  missing.push('Tailwind CSS-origin version/license entry missing from notice manifest');
+const cssNotices = [];
+for (const { name, license } of cssOrigins) {
+  const path = `node_modules/${name}`;
+  const metadata = lock.packages?.[path];
+  const version = metadata?.version;
+  if (!version || metadata.license !== license || metadata.dev !== true) {
+    missing.push(`Unexpected build-time CSS dependency metadata: ${name}`);
+    continue;
+  }
+  if (!publishedManifest.split('\n').includes(`### ${name}@${version} (lockfile: ${license}; build-time CSS)`)) {
+    missing.push(`Missing build-time CSS manifest entry: ${name}@${version}`);
+  }
+  if (name === 'tailwindcss' && !styles.includes(`/*! tailwindcss v${version} |`)) {
+    missing.push(`Generated app CSS lacks the Tailwind ${version} banner`);
+  }
+  if (name === 'lightningcss') {
+    if (!styles.includes('--lightningcss-light:') || !styles.includes('--lightningcss-dark:')) {
+      missing.push('Expected Lightning CSS color-scheme compatibility rules are absent');
+    }
+    if (!publishedManifest.includes(`https://github.com/parcel-bundler/lightningcss/tree/v${version}`)) {
+      missing.push('Missing Lightning CSS source reference');
+    }
+  }
+  const originals = (await readdir(join(root, path), { withFileTypes: true }))
+    .filter((entry) => entry.isFile() && /^(?:licen[cs]e|copying|notice)(?:[.\-_].*)?$/i.test(entry.name));
+  if (originals.length === 0) missing.push(`Missing original ${name} notice`);
+  for (const { name: filename } of originals) {
+    const output = `${name}-${version}-${filename}`;
+    cssNotices.push(`mask-unmask/third-party-licenses/${output}`);
+    if (!publishedManifest.split('\n').includes(`- ${output}`)) missing.push(`Missing CSS notice listing: ${output}`);
+    let originalHash = null;
+    let outputHash = null;
+    try { originalHash = await digest(join(root, path, filename)); } catch { missing.push(`Cannot read CSS notice original: ${name}/${filename}`); }
+    try { outputHash = await digest(join(noticeRoot, output)); } catch { missing.push(`Missing distributed CSS notice: ${output}`); }
+    if (!originalHash || !outputHash || originalHash !== outputHash) missing.push(`CSS notice mismatch: ${output}`);
+  }
 }
-const tailwindExpected = [];
-for (const fileName of tailwindLicenseFiles) {
-  const outputName = `tailwindcss-${tailwindMetadata.version}-${fileName}`;
-  const distributedPath = `mask-unmask/third-party-licenses/${outputName}`;
-  tailwindExpected.push(distributedPath);
-  if (!publishedManifest.split('\n').includes(`- ${outputName}`)) missing.push(`Missing Tailwind file entry: ${outputName}`);
-  let originalHash = null;
-  let outputHash = null;
-  try { originalHash = await digest(join(root, 'node_modules/tailwindcss', fileName)); } catch { missing.push(`Cannot read original Tailwind notice: ${fileName}`); }
-  try { outputHash = await digest(join(noticeRoot, outputName)); } catch { missing.push(`Missing distributed Tailwind notice: ${outputName}`); }
-  if (!originalHash || !outputHash || originalHash !== outputHash) missing.push(`Tailwind license mismatch: ${outputName}`);
-}
-const expectedNoticeFiles = new Set([...copiedNoticeEvidence.map((item) => item.distributed), 'mask-unmask/third-party-licenses/Manrope-OFL.txt', ...tailwindExpected]);
+const expectedNoticeFiles = new Set([...copiedNoticeEvidence.map((item) => item.distributed), 'mask-unmask/third-party-licenses/Manrope-OFL.txt', ...cssNotices]);
 for (const file of files) {
   if (file.path.startsWith('mask-unmask/third-party-licenses/') &&
     file.path !== 'mask-unmask/third-party-licenses/README.md' &&

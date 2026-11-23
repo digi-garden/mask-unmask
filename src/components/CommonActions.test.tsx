@@ -101,6 +101,7 @@ describe('CommonActions Component', () => {
       expect(dialog.getAttribute('open')).toBe('true');
     });
 
+    await screen.findByRole('heading', { name: 'インポートサマリー' });
     const confirmBtn = screen.getByRole('button', { name: 'インポート確定' });
     fireEvent.click(confirmBtn);
 
@@ -139,6 +140,7 @@ describe('CommonActions Component', () => {
       expect(dialog.getAttribute('open')).toBe('true');
     });
 
+    await screen.findByRole('heading', { name: 'インポートサマリー' });
     const confirmBtn = screen.getByRole('button', { name: 'インポート確定' });
     fireEvent.click(confirmBtn);
 

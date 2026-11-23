@@ -7,8 +7,18 @@ async function observeContrast(page: Page, selector: string): Promise<ContrastOb
     type RGBA = [number, number, number, number];
     const parse = (value: string): RGBA => {
       const match = value.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?\s*\)$/);
-      if (!match) throw new Error(`Unexpected CSS color: ${value}`);
-      return [Number(match[1]), Number(match[2]), Number(match[3]), match[4] === undefined ? 1 : Number(match[4])];
+      if (match) return [Number(match[1]), Number(match[2]), Number(match[3]), match[4] === undefined ? 1 : Number(match[4])];
+
+      // Tailwind 4 color-mix() can serialize computed colors as OKLab.
+      const probe = document.createElement('span');
+      probe.hidden = true;
+      probe.style.color = `color(from ${value} srgb r g b / alpha)`;
+      if (!probe.style.color) throw new Error(`Unexpected CSS color: ${value}`);
+      document.body.append(probe);
+      const srgb = getComputedStyle(probe).color.match(/^color\(srgb ([^ ]+) ([^ ]+) ([^ /)]+)(?: \/ ([^ )]+))?\)$/);
+      probe.remove();
+      if (!srgb) throw new Error(`Cannot convert CSS color to sRGB: ${value}`);
+      return [Number(srgb[1]) * 255, Number(srgb[2]) * 255, Number(srgb[3]) * 255, Number(srgb[4] ?? 1)];
     };
     const composite = (front: RGBA, back: RGBA): RGBA => {
       const a = front[3] + back[3] * (1 - front[3]);

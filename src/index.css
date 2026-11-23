@@ -1,9 +1,76 @@
-@import './styles/circlenote-tokens.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss" source(none);
+@import "./styles/circlenote-tokens.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+
+/* Official digi-garden identity colors, kept separate from UI state colors. */
+@theme {
+  --color-identity-primary: #216B73;
+  --color-identity-accent: #F29A65;
+  --color-identity-background: #FAFAF8;
+  --color-identity-inverse: #153F44;
+}
+
+/* Match the existing CircleNote palette through its source tokens. */
+@theme inline {
+  --color-cn-bg: var(--cn-bg);
+  --color-cn-bg-glow: var(--cn-bg-glow);
+  --color-cn-surface: var(--cn-surface);
+  --color-cn-border: var(--cn-border);
+  --color-cn-border-strong: var(--cn-border-strong);
+  --color-cn-text: var(--cn-text);
+  --color-cn-text-muted: var(--cn-text-muted);
+  --color-cn-text-subtle: var(--cn-text-subtle);
+  --color-cn-accent: var(--cn-accent);
+  --color-cn-accent-hover: var(--cn-accent-hover);
+  --color-cn-accent-border: var(--cn-accent-border);
+  --color-cn-on-accent: var(--cn-on-accent);
+  --color-cn-link: var(--cn-link);
+  --color-cn-focus: var(--cn-focus);
+  --color-cn-apricot: var(--cn-apricot);
+  --color-cn-warning: var(--cn-warning);
+  --color-cn-error: var(--cn-error);
+  --color-cn-success: var(--cn-success);
+
+  --color-brand-bg: var(--cn-bg);
+  --color-brand-surface: var(--cn-surface);
+  --color-brand-card: #1A343A;
+  --color-brand-border: var(--cn-border-strong);
+  --color-brand-primary: var(--cn-accent);
+  --color-brand-primaryHover: var(--cn-accent-hover);
+  --color-brand-input: var(--cn-bg);
+  --color-brand-danger: var(--cn-error);
+  --color-brand-warning: var(--cn-warning);
+
+  --color-slate-50: var(--cn-text);
+  --color-slate-100: var(--cn-text);
+  --color-slate-200: var(--cn-text);
+  --color-slate-300: var(--cn-text-muted);
+  --color-slate-400: var(--cn-text-muted);
+  --color-slate-500: var(--cn-text-subtle);
+  --color-slate-600: var(--cn-border-strong);
+  --color-slate-700: var(--cn-border-strong);
+}
 
 @layer base {
+  /* Preserve the Tailwind 3 defaults used by the existing UI. */
+  *, ::before, ::after, ::backdrop, ::file-selector-button {
+    border-color: #e5e7eb;
+  }
+
+  dialog {
+    margin: auto;
+  }
+
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #9ca3af;
+  }
+
   body {
     @apply bg-brand-bg text-slate-50 antialiased;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
