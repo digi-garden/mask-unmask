@@ -189,3 +189,13 @@ npm audit
 このプロジェクトは[MIT License](LICENSE)のもとで公開されています。
 
 Copyright (c) 2026 digi-garden
+
+## 依存関係の定期監査
+
+`.github/workflows/dependency-audit.yml` が毎週月曜の朝（日本時間）に `npm audit` を実行します。Actionsの画面から手動でも実行できます（`workflow_dispatch`）。
+
+- **失敗の条件**：Moderate以上の脆弱性が見つかったとき。`npm audit` が異常終了したときや、JSONが壊れていて判定できないときも失敗にします。判定は `scripts/dependency-audit.mjs` で行います
+- **参考情報**：`npm outdated` の結果は、ジョブのSummaryに一覧として出すだけで、失敗にはしません
+- **失敗したら**：Summaryで件数を確認し、`npm explain <パッケージ名>` で、アプリに含まれる依存か開発用のツールかを見分けます。そのうえで、修正版に更新するか、影響を評価して記録します
+
+判定基準と実装は、Context-Packer（`digi-garden/context-packer`）と同じです。
