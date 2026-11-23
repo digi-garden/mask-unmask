@@ -8,6 +8,10 @@
 
 ## 通常リリース（実行順）
 
+Cloudflare Pagesの運用設定は、マージ前に対象プロジェクトの管理画面で再確認します。リポジトリで定義する既存本番向けビルドは `npm run build`、出力は `dist/` です。独立検証用の構成は `npm run build:standalone` と `dist-standalone/` を使用します。Productionブランチと自動配信、ビルドコマンドと出力先、Node.jsバージョン、Preview対象ブランチを画面で照合します。`Deployments` の現行ProductionのコミットSHA・デプロイID・URLと、切り戻し候補の成功済みProductionのSHA・IDをリリース記録に残します。Previewは本番の切り戻し先に指定できません。
+
+依存更新のStacked PRは、承認後に親PRを先に反映し、子PRのBaseとファイル差分を確認します。親PRをsquashした場合はコミットSHAが変わるため、ファイル差分を照合し、親PRの変更が再導入されないことを確認します。子PRの最終Baseに対するCIが成功したことを確認してから、次の公開判断に進みます。
+
 1. **変更凍結と識別**：対象PR、mainのコミットSHA、製品バージョン、ソースとビルド成果物の対応、デプロイ先のアカウント・プロジェクト・環境を記録する。未マージのPRを公開済みと誤記しない。
 2. **Gate A判定**：共通マスターチェックリストの全項目を `PASS / FAIL / N/A / NOT_RUN` で評価し、証跡URLを残す。未知の重大リスクやGate A FAILがあれば公開しない。
 3. **事前テスト**：対象SHAのCI（type-check、unit、perf、build、Playwright E2E）を確認する。CSP/HTTPヘッダー、プライバシー、法務ページ、OSS表示、プライベート脆弱性報告導線を検証する。
