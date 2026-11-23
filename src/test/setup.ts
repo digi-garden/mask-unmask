@@ -1,9 +1,6 @@
-import { expect, afterEach, beforeAll } from 'vitest';
+import { afterEach, beforeAll } from 'vitest';
 import { cleanup } from '@testing-library/react';
-import * as matchers from '@testing-library/jest-dom/matchers';
-
-// extends Vitest's expect method with methods from react-testing-library
-expect.extend(matchers);
+import '@testing-library/jest-dom/vitest';
 
 // HTML5 dialog を jsdom 用にスタブ化
 beforeAll(() => {
