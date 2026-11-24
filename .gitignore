@@ -5,3 +5,7 @@ dist
 playwright-report
 test-results
 artifacts/
+
+# Dependency audit outputs (weekly workflow)
+audit-result.json
+outdated-result.json
